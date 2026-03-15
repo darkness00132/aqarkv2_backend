@@ -1,4 +1,4 @@
-﻿using Infrastructure.Identity;
+﻿using Domain.Identity;
 
 namespace Infrastructure.Interfaces
 {

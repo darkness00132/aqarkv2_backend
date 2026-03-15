@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces;
-using Infrastructure.Identity;
+using Domain.Identity;
 using Microsoft.Extensions.Configuration;
 using Resend;
 

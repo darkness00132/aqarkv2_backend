@@ -1,6 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Options;
-using Infrastructure.Identity;
+using Domain.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

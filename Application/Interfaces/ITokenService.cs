@@ -1,5 +1,5 @@
 ﻿using Application.DTOs.User;
-using Infrastructure.Identity;
+using Domain.Identity;
 
 namespace Application.Interfaces
 {

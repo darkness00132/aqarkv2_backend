@@ -1,4 +1,5 @@
-﻿using Infrastructure.Identity;
+﻿using Application.Exceptions;
+using Domain.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -25,7 +26,7 @@ namespace Backend.Api.Controllers
 
             if (string.IsNullOrEmpty(userId))
             {
-                return NotFound();
+                throw ApiException.Unauthorized();
             }
 
             var user = await _userManager.FindByIdAsync(userId);

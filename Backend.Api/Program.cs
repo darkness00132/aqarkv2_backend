@@ -1,7 +1,6 @@
 using Application;
-using Application.Exceptions;
+using Backend.Api.Middleware;
 using Infrastructure;
-using Microsoft.AspNetCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +21,7 @@ builder.Services.AddCors(corsBuilder =>
     });
 });
 
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
 var app = builder.Build();
@@ -29,43 +29,14 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+} 
 else
 {
-    app.UseExceptionHandler(errorApp =>
-    {
-        errorApp.Run(async context =>
-        {
-            var ex = context.Features.Get<IExceptionHandlerFeature>()?.Error;
-
-            if (ex is ApiException apiEx)
-            {
-                context.Response.StatusCode = apiEx.StatusCode;
-
-                await Results.Problem(
-                    statusCode: apiEx.StatusCode,
-                    title: "Request Failed",
-                    detail: apiEx.Message
-                ).ExecuteAsync(context);
-
-                return;
-            }
-
-            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-
-            await Results.Problem(
-                statusCode: 500,
-                title: "Server Error"
-            ).ExecuteAsync(context);
-
-        });
-    });
-
-    app.UseStatusCodePages();
+    app.UseExceptionHandler();
 }
-
 
 app.UseHttpsRedirection();
 

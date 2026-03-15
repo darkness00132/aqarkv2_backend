@@ -1,9 +1,9 @@
-﻿using Application.DTOs.User;
+﻿using Application.DTOs.Auth;
+using Application.DTOs.User;
+using Application.Exceptions;
 using Application.Interfaces;
-using Infrastructure.Identity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -38,17 +38,28 @@ namespace Backend.Api.Controllers
         [HttpGet("google/callback")]
         public async Task<IActionResult> GoogleCallBack() 
         {
-            var result = await HttpContext.AuthenticateAsync("Google");
+                var result = await HttpContext.AuthenticateAsync("Google");
 
-            var response = await _authService.HandleGoogleCallbackAsync(result);
+                var response = await _authService.HandleGoogleCallbackAsync(result);
 
-            // Set refresh cookie
-            if (response.RefreshToken != null)
-            {
-                Response.Cookies.Append("refreshToken", response.RefreshToken, response.CookieOptions);
+                // Set refresh cookie
+                if (response.RefreshToken != null)
+                {
+                    var options = GetCookiesOptions();
+                    Response.Cookies.Append("refreshToken", response.RefreshToken, options);
+                }
+
+                return Redirect(response.RedirectUrl);
             }
 
-            return Redirect(response.RedirectUrl);
+        [Authorize]
+        [HttpPost("completeProfile")]
+        public async Task<IActionResult> CompleteProfile(CompleteProfileDTO user , CancellationToken ct) 
+        {
+            //get user id from access token
+            string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            await _authService.HandleCompleteProfileAsync(user, userId, ct);
+            return Ok();
         }
 
         [HttpPost("login")]
@@ -58,14 +69,7 @@ namespace Backend.Api.Controllers
             string ip = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknow";
             LoginResponse response = await _authService.LoginAsync(userDTO, ip, ct);
 
-            var expiresAt = DateTimeOffset.UtcNow.AddDays(_config.GetValue<int>("Jwt:RefreshTokenLifetimeDays"));
-            var cookieOptions = new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = !_env.IsDevelopment(),
-                SameSite = _env.IsDevelopment() ? SameSiteMode.Lax : SameSiteMode.Strict,
-                Expires = expiresAt,
-            };
+            var cookieOptions = GetCookiesOptions();
             Response.Cookies.Append("refreshToken", response.RefreshToken, cookieOptions);
 
             return Ok(new { accessToken=response.AccessToken });
@@ -86,9 +90,9 @@ namespace Backend.Api.Controllers
         }
 
         [HttpPost("forgotPassword")]
-        public async Task<IActionResult> ForgetPassword([FromBody]string email)
+        public async Task<IActionResult> ForgetPassword([FromBody]string email, CancellationToken ct)
         {
-            string token = await _authService.ForgetPassword(email);
+            string token = await _authService.ForgetPassword(email,ct);
             return Ok(new { forgetPasswordToken=token });
         }
 
@@ -104,20 +108,12 @@ namespace Backend.Api.Controllers
         {
             var refreshToken = Request.Cookies["refreshToken"];
             if (refreshToken == null)
-                return Unauthorized();
+                throw ApiException.Unauthorized("refreshToken is not readed");
 
             string ip = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknow";
             LoginResponse response = await _authService.RefreshAsync(refreshToken, ip, ct);
 
-            var expiresAt = DateTimeOffset.UtcNow.AddDays(_config.GetValue<int>("Jwt:RefreshTokenLifetimeDays"));
-            var cookieOptions = new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = !_env.IsDevelopment(),
-                SameSite = _env.IsDevelopment()?SameSiteMode.Lax:SameSiteMode.Strict,
-                Expires = expiresAt,
-            };
-
+            var cookieOptions = GetCookiesOptions();
             Response.Cookies.Append("refreshToken", response.RefreshToken, cookieOptions);
 
             return Ok(new { accessToken = response.AccessToken });
@@ -139,12 +135,26 @@ namespace Backend.Api.Controllers
 
         [Authorize]
         [HttpDelete("revokeAll")]
-        public async Task<IActionResult> RevokeAllToken([FromBody]string userId, CancellationToken ct)
+        public async Task<IActionResult> RevokeAllToken(string userId, CancellationToken ct)
         {
             await _authService.RevokeAllAsync(userId, ct);
             Response.Cookies.Delete("refreshToken");
 
             return NoContent();
+        }
+
+        private CookieOptions GetCookiesOptions(bool sameSite=true) 
+        {
+            var expiresAt = DateTimeOffset.UtcNow.AddDays(_config.GetValue<int>("Jwt:RefreshTokenLifetimeDays"));
+
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = _env.IsDevelopment() ? SameSiteMode.None : SameSiteMode.Strict,
+                Expires = expiresAt,
+            };
+            return cookieOptions;
         }
     }
 }

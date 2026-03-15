@@ -1,9 +1,6 @@
 ﻿using Infrastructure.Interfaces;
 using Infrastructure.Presistance;
 using Microsoft.EntityFrameworkCore.Storage;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Infrastructure.Repositories
 {

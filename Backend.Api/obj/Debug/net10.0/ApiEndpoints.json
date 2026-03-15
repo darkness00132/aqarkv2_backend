@@ -1,5 +1,138 @@
 [
   {
+    "ContainingType": "Backend.Api.Controllers.AdsController",
+    "Method": "GetAd",
+    "RelativePath": "api/Ads/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "slug",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "id",
+        "Type": "",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Application.DTOs.Ad.AdDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Backend.Api.Controllers.AdsController",
+    "Method": "GetAllAds",
+    "RelativePath": "api/Ads/all",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[Application.DTOs.Ad.AdListItemDTO, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Backend.Api.Controllers.AdsController",
+    "Method": "CreateAd",
+    "RelativePath": "api/Ads/create",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Title",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Rooms",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Space",
+        "Type": "System.Double",
+        "IsRequired": false
+      },
+      {
+        "Name": "Price",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "PropertyAddress",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "AdType",
+        "Type": "Domain.Enums.AdType",
+        "IsRequired": false
+      },
+      {
+        "Name": "PropertyType",
+        "Type": "Domain.Enums.PropertyType",
+        "IsRequired": false
+      },
+      {
+        "Name": "GovernorateId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "CityId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Images",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile[]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Backend.Api.Controllers.AuthController",
+    "Method": "CompleteProfile",
+    "RelativePath": "api/Auth/completeProfile",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "user",
+        "Type": "Application.DTOs.Auth.CompleteProfileDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Backend.Api.Controllers.AuthController",
     "Method": "ConfirmEmail",
     "RelativePath": "api/Auth/confirmEmail",
@@ -125,7 +258,7 @@
       {
         "Name": "userId",
         "Type": "System.String",
-        "IsRequired": true
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

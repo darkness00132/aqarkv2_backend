@@ -1,4 +1,5 @@
-﻿using Application.DTOs.User;
+﻿using Application.DTOs.Auth;
+using Application.DTOs.User;
 using Microsoft.AspNetCore.Authentication;
 
 namespace Application.Interfaces
@@ -6,6 +7,8 @@ namespace Application.Interfaces
    public interface IAuthService
     {
         Task<GoogleCallbackResult> HandleGoogleCallbackAsync(AuthenticateResult googleResult);
+
+        Task HandleCompleteProfileAsync(CompleteProfileDTO userDTO,string? userId, CancellationToken ct = default);
 
         Task RegisterAsync(RegisterDTO userDTO, CancellationToken ct = default);
 

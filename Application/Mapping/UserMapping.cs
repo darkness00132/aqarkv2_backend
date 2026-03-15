@@ -1,6 +1,6 @@
 ﻿using Application.DTOs.User;
 using AutoMapper;
-using Infrastructure.Identity;
+using Domain.Identity;
 
 namespace Application.Mapping
 {
@@ -11,6 +11,8 @@ namespace Application.Mapping
             CreateMap<RegisterDTO, User>().ForMember(dest=>dest.UserName,opt=>opt.MapFrom(src=>src.Email));
 
             CreateMap<UserDTO, User>().ReverseMap();
+
+            CreateMap<PublicUser, User>().ReverseMap();
         }
     }
 }

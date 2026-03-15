@@ -5,6 +5,204 @@
     "version": "1.0"
   },
   "paths": {
+    "/api/Ads/all": {
+      "get": {
+        "tags": [
+          "Ads"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdListItemDTO"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdListItemDTO"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdListItemDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Ads/{id}": {
+      "get": {
+        "tags": [
+          "Ads"
+        ],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdDTO"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Ads/create": {
+      "post": {
+        "tags": [
+          "Ads"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "AdType",
+                  "CityId",
+                  "Description",
+                  "GovernorateId",
+                  "Images",
+                  "Price",
+                  "PropertyAddress",
+                  "PropertyType",
+                  "Space",
+                  "Title"
+                ],
+                "type": "object",
+                "properties": {
+                  "Title": {
+                    "type": "string"
+                  },
+                  "Description": {
+                    "type": "string"
+                  },
+                  "Rooms": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Space": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "Price": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "PropertyAddress": {
+                    "type": "string"
+                  },
+                  "AdType": {
+                    "$ref": "#/components/schemas/AdType"
+                  },
+                  "PropertyType": {
+                    "$ref": "#/components/schemas/PropertyType"
+                  },
+                  "GovernorateId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "CityId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Images": {
+                    "maxItems": 5,
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              },
+              "encoding": {
+                "Title": {
+                  "style": "form"
+                },
+                "Description": {
+                  "style": "form"
+                },
+                "Rooms": {
+                  "style": "form"
+                },
+                "Space": {
+                  "style": "form"
+                },
+                "Price": {
+                  "style": "form"
+                },
+                "PropertyAddress": {
+                  "style": "form"
+                },
+                "AdType": {
+                  "style": "form"
+                },
+                "PropertyType": {
+                  "style": "form"
+                },
+                "GovernorateId": {
+                  "style": "form"
+                },
+                "CityId": {
+                  "style": "form"
+                },
+                "Images": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Auth/google": {
       "get": {
         "tags": [
@@ -22,6 +220,37 @@
         "tags": [
           "Auth"
         ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Auth/completeProfile": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompleteProfileDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompleteProfileDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompleteProfileDTO"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -210,25 +439,15 @@
         "tags": [
           "Auth"
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "string"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "type": "string"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "type": "string"
-              }
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string"
             }
           }
-        },
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -251,6 +470,190 @@
   },
   "components": {
     "schemas": {
+      "AdDTO": {
+        "required": [
+          "adType",
+          "cityName",
+          "createdAt",
+          "description",
+          "governorateName",
+          "images",
+          "price",
+          "propertyAddress",
+          "propertyType",
+          "space",
+          "title",
+          "user"
+        ],
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "rooms": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "space": {
+            "type": "number",
+            "format": "double"
+          },
+          "price": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "propertyAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "adType": {
+            "type": "string",
+            "nullable": true
+          },
+          "propertyType": {
+            "type": "string",
+            "nullable": true
+          },
+          "user": {
+            "$ref": "#/components/schemas/PublicUser"
+          },
+          "governorateName": {
+            "type": "string",
+            "nullable": true
+          },
+          "cityName": {
+            "type": "string",
+            "nullable": true
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImageDTO"
+            },
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AdListItemDTO": {
+        "required": [
+          "adType",
+          "cityName",
+          "coverImage",
+          "createdAt",
+          "governorateName",
+          "price",
+          "propertyType",
+          "slug",
+          "space",
+          "title",
+          "user"
+        ],
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "rooms": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "space": {
+            "type": "number",
+            "format": "double"
+          },
+          "price": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "adType": {
+            "type": "string",
+            "nullable": true
+          },
+          "propertyType": {
+            "type": "string",
+            "nullable": true
+          },
+          "governorateName": {
+            "type": "string",
+            "nullable": true
+          },
+          "cityName": {
+            "type": "string",
+            "nullable": true
+          },
+          "user": {
+            "$ref": "#/components/schemas/PublicUser"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "coverImage": {
+            "$ref": "#/components/schemas/ImageDTO"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AdType": {
+        "enum": [
+          1,
+          2
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "CompleteProfileDTO": {
+        "required": [
+          "phoneNumber",
+          "role"
+        ],
+        "type": "object",
+        "properties": {
+          "phoneNumber": {
+            "minLength": 1,
+            "pattern": "^\\+?[1-9]\\d{1,14}$",
+            "type": "string"
+          },
+          "role": {
+            "$ref": "#/components/schemas/publicRoles"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ImageDTO": {
+        "required": [
+          "url"
+        ],
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "LoginDTO": {
         "required": [
           "email",
@@ -271,12 +674,50 @@
         },
         "additionalProperties": false
       },
+      "PropertyType": {
+        "enum": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "PublicUser": {
+        "required": [
+          "name",
+          "phoneNumber",
+          "slug"
+        ],
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "RegisterDTO": {
         "required": [
           "email",
           "name",
           "password",
-          "phoneNumber"
+          "phoneNumber",
+          "role"
         ],
         "type": "object",
         "properties": {
@@ -299,6 +740,9 @@
             "minLength": 6,
             "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*\\W).+$",
             "type": "string"
+          },
+          "role": {
+            "$ref": "#/components/schemas/publicRoles"
           }
         },
         "additionalProperties": false
@@ -320,10 +764,21 @@
           }
         },
         "additionalProperties": false
+      },
+      "publicRoles": {
+        "enum": [
+          1,
+          2
+        ],
+        "type": "integer",
+        "format": "int32"
       }
     }
   },
   "tags": [
+    {
+      "name": "Ads"
+    },
     {
       "name": "Auth"
     },

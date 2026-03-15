@@ -1,10 +1,10 @@
-﻿using Application.DTOs.User;
+﻿using Application.DTOs.Auth;
+using Application.DTOs.User;
 using Application.Exceptions;
 using Application.Interfaces;
 using Application.Validators;
 using AutoMapper;
-using Domain.Enums;
-using Infrastructure.Identity;
+using Domain.Identity;
 using Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -81,7 +81,7 @@ namespace Application.Services
 
         public async Task<GoogleCallbackResult> HandleGoogleCallbackAsync(AuthenticateResult googleResult)
         {
-            string frontendUrl = _config.GetValue<string>("frontendUrl");
+            string frontendUrl = _config.GetValue<string>("frontendUrl")!;
 
             if (!googleResult.Succeeded)
             {
@@ -113,20 +113,19 @@ namespace Application.Services
                 await _userManager.CreateAsync(user);
             }
 
-            string accessToken = await CreateAccessToken(user);
-
             string refreshToken = await GenerateRefreshToken(user, ip:"Unknown");
+
+            await _uow.SaveChangesAsync();
+
             int ExpiresAt = _config.GetValue<int>("Jwt:RefreshTokenLifetimeDays");
 
             return GoogleCallbackResult.Successed(
-                accessToken,
                 refreshToken,
                 DateTime.UtcNow.AddDays(ExpiresAt),
                 user.IsProfileCompleted ?
-                    $"{frontendUrl}/auth/success?accessToken={accessToken}" :
-                    $"{frontendUrl}/auth/completeProfile?accessToken={accessToken}"
+                    $"{frontendUrl}/":
+                    $"{frontendUrl}/auth/completeProfile"
             );
-
         }
 
         public async Task<LoginResponse> LoginAsync(LoginDTO userDTO, string ip, CancellationToken ct = default)
@@ -193,9 +192,7 @@ namespace Application.Services
                 throw ApiException.Conflict(msg);
             }
 
-            string role = UserRoles.User.ToString();
-            await _userManager.AddToRoleAsync(user, role);
-
+            await _userManager.AddToRoleAsync(user, userDTO.Role.ToString());
 
             string token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             string encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
@@ -284,6 +281,20 @@ namespace Application.Services
             await _refreshTokenRepo.AddAsync(refreshToken);
 
             return rawRefresh;
+        }
+
+        public async Task HandleCompleteProfileAsync(CompleteProfileDTO userDTO,string? userId, CancellationToken ct = default)
+        {
+            if (userId is null) ApiException.Unauthorized();
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user is null) ApiException.NotFound("هذا حساب غير موجود");
+
+            user.IsProfileCompleted = true;
+            user.PhoneNumber = userDTO.PhoneNumber;
+            await _userManager.AddToRoleAsync(user, userDTO.Role.ToString());
+
+            await _uow.SaveChangesAsync(ct);
         }
     }
 }

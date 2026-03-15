@@ -2,7 +2,7 @@
 using Infrastructure.Presistance;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
-using Infrastructure.Identity;
+using Domain.Identity;
 using Microsoft.AspNetCore.Identity;
 using Infrastructure.Repositories;
 using Infrastructure.Interfaces;
@@ -31,6 +31,8 @@ namespace Infrastructure
             // Register repositories
             service.AddScoped<IRefreshTokenRepo, RefreshTokenRepo>();
             service.AddScoped<IUnitOfWork, UnitOfWork>();
+            service.AddScoped<IImageRepo, ImageRepo>();
+            service.AddScoped<IAdRepo, AdRepo>();
 
             return service;
         }
