@@ -1,6 +1,6 @@
-﻿using Domain.Entities;
+﻿using Domain.Entities.AdEntities;
+using Domain.Entities.UsersEnities;
 using Domain.Enums;
-using Domain.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 

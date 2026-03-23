@@ -4,7 +4,8 @@
     using Application.Interfaces;
     using AutoMapper;
     using Domain.Entities;
-    using Domain.Enums;
+using Domain.Entities.AdEntities;
+using Domain.Enums;
     using Domain.Services;
     using Infrastructure.Interfaces;
     using Shared.Filters;

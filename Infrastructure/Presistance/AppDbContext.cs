@@ -1,9 +1,10 @@
 ﻿using Domain.Entities;
-using Domain.Entities;
-using Domain.Entities.Identity;
-using Domain.Identity;
+using Domain.Entities.AdEntities;
+using Domain.Entities.Brokers;
+using Domain.Entities.UsersEnities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace Infrastructure.Presistance
 {
@@ -23,9 +24,37 @@ namespace Infrastructure.Presistance
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<PaymentAttempt> PaymentAttempts { get; set; }
 
+        public DbSet<BrokerProfile> BrokerProfiles { get; set; }
+        public DbSet<BrokerReport> BrokerReports { get; set; }
+        public DbSet<BrokerReview> BrokerReviews { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<BrokerReport>()
+                    .HasOne(r => r.Broker)
+                    .WithMany()
+                    .HasForeignKey(r => r.BrokerUserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<BrokerReport>()
+                    .HasOne(r => r.User)
+                    .WithMany()
+                    .HasForeignKey(r => r.UserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<BrokerReview>()
+                    .HasOne(r => r.Broker)
+                    .WithMany()
+                    .HasForeignKey(r => r.BrokerUserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<BrokerReview>()
+                    .HasOne(r => r.User)
+                    .WithMany()
+                    .HasForeignKey(r => r.UserId)
+                    .OnDelete(DeleteBehavior.Restrict);
 
             builder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         }

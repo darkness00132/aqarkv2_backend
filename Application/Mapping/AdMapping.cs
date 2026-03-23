@@ -1,7 +1,7 @@
 ﻿using Application.DTOs.Ad;
 using Application.DTOs.Ad.Private;
 using AutoMapper;
-using Domain.Entities;
+using Domain.Entities.AdEntities;
 using Domain.Enums;
 
 namespace Application.Mapping

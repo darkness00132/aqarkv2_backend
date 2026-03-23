@@ -2,10 +2,10 @@
 {
     public enum AdState
     {
-        Unfinished,     // على الهيكل
-        HalfFinished,   // نصف تشطيب
-        FullyFinished,  // تشطيب كامل
-        Furnished,      // مفروش
+        Unfinished,
+        HalfFinished,
+        FullyFinished,
+        Furnished,
     }
 
     public static class AdStateExtensions

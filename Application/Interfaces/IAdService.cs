@@ -1,6 +1,6 @@
 ﻿using Application.DTOs.Ad;
 using Application.DTOs.Ad.Private;
-using Domain.Entities;
+using Domain.Entities.AdEntities;
 using Shared.Filters;
 using Shared.Pagination;
 

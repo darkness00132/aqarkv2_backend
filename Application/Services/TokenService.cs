@@ -1,7 +1,7 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
 using Application.Options;
-using Domain.Identity;
+using Domain.Entities.UsersEnities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

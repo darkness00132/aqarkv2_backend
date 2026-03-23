@@ -1,5 +1,5 @@
 ﻿using Application.Exceptions;
-using Domain.Identity;
+using Domain.Entities.UsersEnities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

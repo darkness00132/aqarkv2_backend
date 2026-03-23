@@ -1,9 +1,7 @@
-﻿using Domain.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Identity
+namespace Domain.Entities.UsersEnities
 {
     [Index(nameof(TokenHash), IsUnique = true)]
     [Index(nameof(UserId))]

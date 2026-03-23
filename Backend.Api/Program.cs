@@ -2,6 +2,7 @@ using Application;
 using Backend.Api.Middleware;
 using Infrastructure;
 using Microsoft.AspNetCore.RateLimiting;
+using System.Text.Json;
 using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,8 +36,12 @@ builder.Services.AddRateLimiter(options =>
 
     options.OnRejected = async (ctx, token) =>
     {
+        ctx.HttpContext.Response.ContentType = "application/json";
         ctx.HttpContext.Response.StatusCode = 429;
-        await ctx.HttpContext.Response.WriteAsync("لقد تجاوزت الحد المسموح به من الطلبات، يرجى الانتظار قليلاً ثم المحاولة مرة أخرى.", token);
+        await ctx.HttpContext.Response.WriteAsync(
+            JsonSerializer.Serialize(new { detail = "لقد تجاوزت الحد المسموح به من الطلبات، يرجى الانتظار قليلاً ثم المحاولة مرة أخرى." }),
+            token
+        );
     };
 });
 

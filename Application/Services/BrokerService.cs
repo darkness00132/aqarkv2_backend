@@ -4,9 +4,9 @@ using Application.Exceptions;
 using Application.Interfaces;
 using AutoMapper;
 using Infrastructure.Interfaces;
-using Domain.Identity;
 using Microsoft.AspNetCore.Identity;
 using Domain.Enums;
+using Domain.Entities.UsersEnities;
 
 namespace Application.Services
 {

@@ -1,8 +1,7 @@
-﻿using Domain.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace Domain.Entities.Identity
+namespace Domain.Entities.UsersEnities
 {
     [Index(nameof(UserId), IsUnique = true)]
     public class UserAccountSecurity

@@ -1,5 +1,5 @@
 ﻿using Application.Exceptions;
-using Domain.Identity;
+using Domain.Entities.UsersEnities;
 
 namespace Application.Validators
 {

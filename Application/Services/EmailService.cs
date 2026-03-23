@@ -1,5 +1,4 @@
 ﻿using Application.Interfaces;
-using Domain.Identity;
 using Microsoft.Extensions.Configuration;
 using Resend;
 

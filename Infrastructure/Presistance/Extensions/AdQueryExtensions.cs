@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Domain.Entities;
+using Domain.Entities.AdEntities;
 using Shared.Filters;
 
 namespace Infrastructure.Presistance.Extensions

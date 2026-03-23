@@ -1,9 +1,9 @@
 ﻿using Domain.Enums;
-using Domain.Identity;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
+using Domain.Entities.UsersEnities;
 
-namespace Domain.Entities
+namespace Domain.Entities.AdEntities
 {
     [Index(nameof(Slug), IsUnique = true)]
     public class Ad

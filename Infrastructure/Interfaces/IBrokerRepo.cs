@@ -1,5 +1,4 @@
-﻿
-using Domain.Identity;
+﻿using Domain.Entities.UsersEnities;
 
 namespace Infrastructure.Interfaces
 {

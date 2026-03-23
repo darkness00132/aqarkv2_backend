@@ -1,8 +1,9 @@
-﻿using Domain.Enums;
+﻿using Domain.Entities.UsersEnities;
+using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace Domain.Entities
+namespace Domain.Entities.AdEntities
 {
     [Index(nameof(AdId))]
     public class AdLog
@@ -13,6 +14,7 @@ namespace Domain.Entities
         public Ad Ad { get; set; }
 
         public Guid UserId { get; set; }
+        public User User { get; set; }
 
         public AdAction Action { get; set; }
 

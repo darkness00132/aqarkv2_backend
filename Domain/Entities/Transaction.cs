@@ -1,5 +1,5 @@
-﻿using Domain.Enums;
-using Domain.Identity;
+﻿using Domain.Entities.UsersEnities;
+using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 

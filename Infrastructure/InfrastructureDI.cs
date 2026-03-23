@@ -1,5 +1,5 @@
-﻿using Domain.Enums;
-using Domain.Identity;
+﻿using Domain.Entities.UsersEnities;
+using Domain.Enums;
 using Infrastructure.Interfaces;
 using Infrastructure.Presistance;
 using Infrastructure.Repositories;
@@ -26,6 +26,8 @@ namespace Infrastructure
                     o.MapEnum<AdAction>();
                     o.MapEnum<CreditsLogAction>();
                     o.MapEnum<PaymentStatus>();
+                    o.MapEnum<ReportReason>();
+                    o.MapEnum<ReportStatus>();
                 })
             );
             service.AddDataProtection();

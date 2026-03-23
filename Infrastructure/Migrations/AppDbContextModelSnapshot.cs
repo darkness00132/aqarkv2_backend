@@ -27,9 +27,11 @@ namespace Infrastructure.Migrations
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "credits_log_action", new[] { "gift", "purchase", "refund", "spend" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "payment_status", new[] { "completed", "failed", "pending" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "property_type", new[] { "apartment", "building", "chalet", "commercial_shop", "compound", "farm", "garage", "hotel", "house", "land", "medical_clinic", "office", "studio", "villa", "warehouse" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "report_reason", new[] { "fake_listing", "fraud", "harassment", "other" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "report_status", new[] { "dismissed", "pending", "resolved", "under_review" });
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Entities.Ad", b =>
+            modelBuilder.Entity("Domain.Entities.AdEntities.Ad", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -93,7 +95,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Ads");
                 });
 
-            modelBuilder.Entity("Domain.Entities.AdLog", b =>
+            modelBuilder.Entity("Domain.Entities.AdEntities.AdLog", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -119,7 +121,159 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("AdId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("AdLogs");
+                });
+
+            modelBuilder.Entity("Domain.Entities.AdEntities.Image", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid>("AdId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdId");
+
+                    b.ToTable("Images");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Brokers.BrokerProfile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Bio")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CoverPhoto")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsFeatured")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset?>("LicenseExpiryDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LicenseNumber")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("WhatsAppNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("YearsOfExperience")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("BrokerProfiles");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Brokers.BrokerReport", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("BrokerUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<ReportReason>("Reason")
+                        .HasColumnType("report_reason");
+
+                    b.Property<ReportStatus>("Status")
+                        .HasColumnType("report_status");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("UserId1")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1");
+
+                    b.HasIndex("BrokerUserId", "UserId")
+                        .IsUnique();
+
+                    b.ToTable("BrokerReports");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Brokers.BrokerReview", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("BrokerUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("UserId1")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1");
+
+                    b.HasIndex("BrokerUserId", "UserId")
+                        .IsUnique();
+
+                    b.ToTable("BrokerReviews");
                 });
 
             modelBuilder.Entity("Domain.Entities.CreditsLog", b =>
@@ -186,68 +340,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("CreditsPlans");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Identity.UserAccountSecurity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("BlockReason")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<DateTimeOffset?>("BlockedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("BlockedByUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset?>("LastLoginAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("LastLoginIp")
-                        .HasMaxLength(45)
-                        .HasColumnType("character varying(45)");
-
-                    b.Property<DateTimeOffset?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("UserAccountSecurities");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Image", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<Guid>("AdId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AdId");
-
-                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("Domain.Entities.PaymentAttempt", b =>
@@ -359,7 +451,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Transactions");
                 });
 
-            modelBuilder.Entity("Domain.Identity.RefreshToken", b =>
+            modelBuilder.Entity("Domain.Entities.UsersEnities.RefreshToken", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -399,7 +491,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
-            modelBuilder.Entity("Domain.Identity.Role", b =>
+            modelBuilder.Entity("Domain.Entities.UsersEnities.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -456,7 +548,7 @@ namespace Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Domain.Identity.User", b =>
+            modelBuilder.Entity("Domain.Entities.UsersEnities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -541,6 +633,46 @@ namespace Infrastructure.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.UsersEnities.UserAccountSecurity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("BlockReason")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<DateTimeOffset?>("BlockedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("BlockedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset?>("LastLoginAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastLoginIp")
+                        .HasMaxLength(45)
+                        .HasColumnType("character varying(45)");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserAccountSecurities");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -646,9 +778,9 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.Ad", b =>
+            modelBuilder.Entity("Domain.Entities.AdEntities.Ad", b =>
                 {
-                    b.HasOne("Domain.Identity.User", "User")
+                    b.HasOne("Domain.Entities.UsersEnities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -657,20 +789,94 @@ namespace Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.Entities.AdLog", b =>
+            modelBuilder.Entity("Domain.Entities.AdEntities.AdLog", b =>
                 {
-                    b.HasOne("Domain.Entities.Ad", "Ad")
+                    b.HasOne("Domain.Entities.AdEntities.Ad", "Ad")
                         .WithMany("Logs")
                         .HasForeignKey("AdId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.UsersEnities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Ad");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Entities.AdEntities.Image", b =>
+                {
+                    b.HasOne("Domain.Entities.AdEntities.Ad", null)
+                        .WithMany("Images")
+                        .HasForeignKey("AdId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.Brokers.BrokerProfile", b =>
+                {
+                    b.HasOne("Domain.Entities.UsersEnities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Brokers.BrokerReport", b =>
+                {
+                    b.HasOne("Domain.Entities.UsersEnities.User", "Broker")
+                        .WithMany()
+                        .HasForeignKey("BrokerUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.UsersEnities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.UsersEnities.User", null)
+                        .WithMany("Reports")
+                        .HasForeignKey("UserId1");
+
+                    b.Navigation("Broker");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Brokers.BrokerReview", b =>
+                {
+                    b.HasOne("Domain.Entities.UsersEnities.User", "Broker")
+                        .WithMany()
+                        .HasForeignKey("BrokerUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.UsersEnities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.UsersEnities.User", null)
+                        .WithMany("Reviews")
+                        .HasForeignKey("UserId1");
+
+                    b.Navigation("Broker");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Entities.CreditsLog", b =>
                 {
-                    b.HasOne("Domain.Entities.Ad", "Ad")
+                    b.HasOne("Domain.Entities.AdEntities.Ad", "Ad")
                         .WithMany()
                         .HasForeignKey("AdId");
 
@@ -678,7 +884,7 @@ namespace Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("TransactionId");
 
-                    b.HasOne("Domain.Identity.User", "User")
+                    b.HasOne("Domain.Entities.UsersEnities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -693,33 +899,13 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.CreditsPlan", b =>
                 {
-                    b.HasOne("Domain.Identity.User", "User")
+                    b.HasOne("Domain.Entities.UsersEnities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Identity.UserAccountSecurity", b =>
-                {
-                    b.HasOne("Domain.Identity.User", "User")
-                        .WithOne("Security")
-                        .HasForeignKey("Domain.Entities.Identity.UserAccountSecurity", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Image", b =>
-                {
-                    b.HasOne("Domain.Entities.Ad", null)
-                        .WithMany("Images")
-                        .HasForeignKey("AdId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.PaymentAttempt", b =>
@@ -741,7 +927,7 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Identity.User", "User")
+                    b.HasOne("Domain.Entities.UsersEnities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -760,7 +946,7 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Identity.User", "User")
+                    b.HasOne("Domain.Entities.UsersEnities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -771,9 +957,9 @@ namespace Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.Identity.RefreshToken", b =>
+            modelBuilder.Entity("Domain.Entities.UsersEnities.RefreshToken", b =>
                 {
-                    b.HasOne("Domain.Identity.User", "User")
+                    b.HasOne("Domain.Entities.UsersEnities.User", "User")
                         .WithMany("RefreshTokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -782,9 +968,20 @@ namespace Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Domain.Entities.UsersEnities.UserAccountSecurity", b =>
+                {
+                    b.HasOne("Domain.Entities.UsersEnities.User", "User")
+                        .WithOne("Security")
+                        .HasForeignKey("Domain.Entities.UsersEnities.UserAccountSecurity", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
-                    b.HasOne("Domain.Identity.Role", null)
+                    b.HasOne("Domain.Entities.UsersEnities.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -793,7 +990,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
-                    b.HasOne("Domain.Identity.User", null)
+                    b.HasOne("Domain.Entities.UsersEnities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -802,7 +999,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
-                    b.HasOne("Domain.Identity.User", null)
+                    b.HasOne("Domain.Entities.UsersEnities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -811,13 +1008,13 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.HasOne("Domain.Identity.Role", null)
+                    b.HasOne("Domain.Entities.UsersEnities.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Identity.User", null)
+                    b.HasOne("Domain.Entities.UsersEnities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -826,14 +1023,14 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.HasOne("Domain.Identity.User", null)
+                    b.HasOne("Domain.Entities.UsersEnities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Entities.Ad", b =>
+            modelBuilder.Entity("Domain.Entities.AdEntities.Ad", b =>
                 {
                     b.Navigation("Images");
 
@@ -845,9 +1042,13 @@ namespace Infrastructure.Migrations
                     b.Navigation("Discount");
                 });
 
-            modelBuilder.Entity("Domain.Identity.User", b =>
+            modelBuilder.Entity("Domain.Entities.UsersEnities.User", b =>
                 {
                     b.Navigation("RefreshTokens");
+
+                    b.Navigation("Reports");
+
+                    b.Navigation("Reviews");
 
                     b.Navigation("Security");
                 });

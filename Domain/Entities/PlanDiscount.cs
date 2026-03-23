@@ -1,4 +1,4 @@
-﻿using Domain.Identity;
+﻿using Domain.Entities.UsersEnities;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 

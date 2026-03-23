@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Domain.Enums
+﻿namespace Domain.Enums
 {
     public enum CreditsLogAction
     {
@@ -10,5 +6,17 @@ namespace Domain.Enums
         Spend,
         Refund,
         Gift
+    }
+
+    public static class CreditsLogActionExtensions
+    {
+        public static string ToArabic(this CreditsLogAction action) => action switch
+        {
+            CreditsLogAction.Purchase => "شراء",
+            CreditsLogAction.Spend => "إنفاق",
+            CreditsLogAction.Refund => "استرداد",
+            CreditsLogAction.Gift => "هدية",
+            _ => throw new ArgumentOutOfRangeException(nameof(action), action, null)
+        };
     }
 }

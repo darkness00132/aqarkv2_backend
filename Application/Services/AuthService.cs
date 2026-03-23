@@ -4,7 +4,7 @@ using Application.Exceptions;
 using Application.Interfaces;
 using Application.Validators;
 using AutoMapper;
-using Domain.Identity;
+using Domain.Entities.UsersEnities;
 using Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;

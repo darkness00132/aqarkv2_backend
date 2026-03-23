@@ -2,11 +2,10 @@
 using Application.DTOs.User;
 using Application.Exceptions;
 using Application.Interfaces;
-using Domain.Identity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace Backend.Api.Controllers
 {

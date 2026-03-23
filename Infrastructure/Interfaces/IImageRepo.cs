@@ -1,4 +1,4 @@
-﻿using Domain.Entities;
+﻿using Domain.Entities.AdEntities;
 
 namespace Infrastructure.Interfaces
 {
