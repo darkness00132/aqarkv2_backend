@@ -1191,6 +1191,9 @@
             "type": "string",
             "format": "uuid"
           },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
           "action": {
             "$ref": "#/components/schemas/AdAction"
           },
@@ -1336,6 +1339,90 @@
         ],
         "type": "integer",
         "format": "int32"
+      },
+      "BrokerReport": {
+        "required": [
+          "description",
+          "reason"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "brokerUserId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "broker": {
+            "$ref": "#/components/schemas/User"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "reason": {
+            "$ref": "#/components/schemas/ReportReason"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/ReportStatus"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "BrokerReview": {
+        "required": [
+          "comment",
+          "rating"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "brokerUserId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "broker": {
+            "$ref": "#/components/schemas/User"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          },
+          "rating": {
+            "maximum": 5,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
       },
       "CompleteProfileDTO": {
         "required": [
@@ -1541,6 +1628,26 @@
         },
         "additionalProperties": false
       },
+      "ReportReason": {
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "ReportStatus": {
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
       "ResetPasswordDTO": {
         "type": "object",
         "properties": {
@@ -1641,13 +1748,6 @@
           "isProfileCompleted": {
             "type": "boolean"
           },
-          "refreshTokens": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/RefreshToken"
-            },
-            "nullable": true
-          },
           "isBlocked": {
             "type": "boolean"
           },
@@ -1657,6 +1757,27 @@
           "createdAt": {
             "type": "string",
             "format": "date-time"
+          },
+          "refreshTokens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RefreshToken"
+            },
+            "nullable": true
+          },
+          "reviews": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BrokerReview"
+            },
+            "nullable": true
+          },
+          "reports": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BrokerReport"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false

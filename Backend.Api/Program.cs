@@ -79,15 +79,15 @@ else
     app.UseExceptionHandler();
 }
 
-app.UseRateLimiter();
+app.UseHttpsRedirection();
 
 app.UseCors();
-
-app.UseHttpsRedirection();
 
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseRateLimiter();
 
 app.MapControllers();
 

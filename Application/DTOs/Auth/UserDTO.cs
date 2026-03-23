@@ -12,6 +12,8 @@ namespace Application.DTOs.User
 
         public required string Email { get; set; }
 
+        public string? profilePhoto { get; set; }
+
         public required int Credits { get; set; }
     }
 }

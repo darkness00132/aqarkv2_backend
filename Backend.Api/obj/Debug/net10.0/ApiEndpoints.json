@@ -361,7 +361,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "Domain.Entities.Ad",
+        "Type": "Domain.Entities.AdEntities.Ad",
         "MediaTypes": [
           "text/plain",
           "application/json",

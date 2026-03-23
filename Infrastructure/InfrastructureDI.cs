@@ -28,6 +28,7 @@ namespace Infrastructure
                     o.MapEnum<PaymentStatus>();
                     o.MapEnum<ReportReason>();
                     o.MapEnum<ReportStatus>();
+                    o.MapEnum<VerificationStatus>();
                 })
             );
             service.AddDataProtection();
