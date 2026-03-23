@@ -18,7 +18,7 @@
     <Import Project="$(NuGetPackageRoot)microsoft.entityframeworkcore\10.0.5\buildTransitive\net10.0\Microsoft.EntityFrameworkCore.props" Condition="Exists('$(NuGetPackageRoot)microsoft.entityframeworkcore\10.0.5\buildTransitive\net10.0\Microsoft.EntityFrameworkCore.props')" />
   </ImportGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <PkgAWSSDK_Core Condition=" '$(PkgAWSSDK_Core)' == '' ">C:\Users\Darkness00132\.nuget\packages\awssdk.core\4.0.3.17</PkgAWSSDK_Core>
-    <PkgAWSSDK_S3 Condition=" '$(PkgAWSSDK_S3)' == '' ">C:\Users\Darkness00132\.nuget\packages\awssdk.s3\4.0.19</PkgAWSSDK_S3>
+    <PkgAWSSDK_Core Condition=" '$(PkgAWSSDK_Core)' == '' ">C:\Users\Darkness00132\.nuget\packages\awssdk.core\4.0.3.19</PkgAWSSDK_Core>
+    <PkgAWSSDK_S3 Condition=" '$(PkgAWSSDK_S3)' == '' ">C:\Users\Darkness00132\.nuget\packages\awssdk.s3\4.0.19.1</PkgAWSSDK_S3>
   </PropertyGroup>
 </Project>

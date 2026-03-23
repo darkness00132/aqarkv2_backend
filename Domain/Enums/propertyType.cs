@@ -1,30 +1,44 @@
-﻿
-namespace Domain.Enums
+﻿namespace Domain.Enums
 {
     public enum PropertyType
     {
-        Apartment = 1,
-        Villa = 2,
-        House = 3,
-        Land = 4,
-        CommercialShop = 5,
-        CommercialOffice = 6,
-        Warehouse = 7,
-        Studio = 8
+        Apartment,
+        Villa,
+        Chalet,
+        House,
+        Studio,
+        Compound,
+        Office,
+        CommercialShop,
+        MedicalClinic,
+        Hotel,
+        Building,
+        Farm,
+        Land,
+        Warehouse,
+        Garage,
     }
+
     public static class PropertyTypeExtensions
     {
         public static string ToArabic(this PropertyType propertyType) => propertyType switch
         {
             PropertyType.Apartment => "شقة",
             PropertyType.Villa => "فيلا",
+            PropertyType.Chalet => "شاليه",
             PropertyType.House => "منزل",
-            PropertyType.Land => "أرض",
-            PropertyType.CommercialShop => "محل تجاري",
-            PropertyType.CommercialOffice => "مكتب تجاري",
-            PropertyType.Warehouse => "مخزن",
             PropertyType.Studio => "استوديو",
-            _ => throw new ArgumentOutOfRangeException()
+            PropertyType.Compound => "كمبوند",
+            PropertyType.Office => "مكتب",
+            PropertyType.CommercialShop => "محل تجاري",
+            PropertyType.MedicalClinic => "عيادة طبية",
+            PropertyType.Hotel => "فندق",
+            PropertyType.Building => "عمارة",
+            PropertyType.Farm => "مزرعة",
+            PropertyType.Land => "أرض",
+            PropertyType.Warehouse => "مخزن",
+            PropertyType.Garage => "جراج",
+            _ => throw new ArgumentOutOfRangeException(nameof(propertyType), propertyType, null)
         };
     }
 }

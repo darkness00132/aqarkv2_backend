@@ -19,8 +19,8 @@ using Microsoft.AspNetCore.Identity;
 
             public bool IsBlocked { get; set; } = false;
 
-            public UserSecurity? Security { get; set; }
+            public UserAccountSecurity? Security { get; set; }
 
-            public DateTime CreatedAt { get; set; }
+            public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
         }
     }

@@ -1,7 +1,10 @@
 ﻿using Amazon.S3;
+using Application.Constants;
 using Application.Interfaces;
 using Application.Options;
 using Application.Services;
+using Domain.Enums;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,8 +46,10 @@ namespace Application
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key)),
                 };
             }).AddGoogle(options => {
-                options.ClientId = config.GetValue<string>("Google:ClientId")!; options.ClientSecret = config.GetValue<string>("Google:ClientSecret")!; 
+                options.ClientId = config.GetValue<string>("Google:ClientId")!;
+                options.ClientSecret = config.GetValue<string>("Google:ClientSecret")!; 
                 options.CallbackPath = "/signin-google";
+                options.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
             });
 
             //add S3 storage
@@ -66,6 +71,21 @@ namespace Application
                 return new AmazonS3Client(s3Config);
             });
 
+            service.AddAuthorization(options =>
+            {
+                options.AddPolicy(Policies.BrokerOnly, policy =>
+                    policy.RequireRole(nameof(UserRoles.Broker)));
+
+                options.AddPolicy(Policies.AdminOnly, policy =>
+                    policy.RequireRole(nameof(UserRoles.Admin), nameof(UserRoles.SuperAdmin)));
+
+                options.AddPolicy(Policies.AdminOrBroker, policy =>
+                    policy.RequireRole(nameof(UserRoles.SuperAdmin), nameof(UserRoles.Admin), nameof(UserRoles.Broker)));
+
+                options.AddPolicy(Policies.SuperAdminOnly, policy =>
+                    policy.RequireRole(nameof(UserRoles.SuperAdmin)));
+            });
+
             //add customed services
             service.AddScoped<ITokenService, TokenService>();
             service.AddScoped<IAuthService, AuthService>();
@@ -73,6 +93,7 @@ namespace Application
             service.AddScoped<IStorageService, S3StorageService>();
             service.AddScoped<IAdService, AdService>();
             service.AddSingleton<LocationService>();
+            service.AddScoped<IBrokerService, BrokerService>();
 
             return service;
         }

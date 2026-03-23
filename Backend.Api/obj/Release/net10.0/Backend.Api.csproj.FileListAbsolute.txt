@@ -7,7 +7,6 @@ C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Backend.Api\bin\Release\net
 C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Backend.Api\bin\Release\net10.0\Backend.Api.dll
 C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Backend.Api\bin\Release\net10.0\Backend.Api.pdb
 C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Backend.Api\bin\Release\net10.0\AutoMapper.dll
-C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Backend.Api\bin\Release\net10.0\CloudinaryDotNet.dll
 C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Backend.Api\bin\Release\net10.0\Humanizer.dll
 C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Backend.Api\bin\Release\net10.0\Microsoft.AspNetCore.Authentication.Google.dll
 C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Backend.Api\bin\Release\net10.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
@@ -144,3 +143,8 @@ C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Backend.Api\obj\Release\net
 C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Backend.Api\obj\Release\net10.0\Backend.Api.pdb
 C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Backend.Api\obj\Release\net10.0\Backend.Api.genruntimeconfig.cache
 C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Backend.Api\obj\Release\net10.0\ref\Backend.Api.dll
+C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Backend.Api\bin\Release\net10.0\AWSSDK.Core.dll
+C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Backend.Api\bin\Release\net10.0\AWSSDK.S3.dll
+C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Backend.Api\bin\Release\net10.0\SixLabors.ImageSharp.dll
+C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Backend.Api\bin\Release\net10.0\Shared.dll
+C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Backend.Api\bin\Release\net10.0\Shared.pdb

@@ -13,13 +13,13 @@ C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend.sln\Domain\obj\Debug\net10.
 C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Domain\bin\Debug\net10.0\Domain.deps.json
 C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Domain\bin\Debug\net10.0\Domain.dll
 C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Domain\bin\Debug\net10.0\Domain.pdb
+C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Domain\obj\Debug\net10.0\Domain.csproj.AssemblyReference.cache
 C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Domain\obj\Debug\net10.0\Domain.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Domain\obj\Debug\net10.0\Domain.AssemblyInfoInputs.cache
 C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Domain\obj\Debug\net10.0\Domain.AssemblyInfo.cs
 C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Domain\obj\Debug\net10.0\Domain.csproj.CoreCompileInputs.cache
+C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Domain\obj\Debug\net10.0\Domain.sourcelink.json
 C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Domain\obj\Debug\net10.0\Domain.dll
 C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Domain\obj\Debug\net10.0\refint\Domain.dll
 C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Domain\obj\Debug\net10.0\Domain.pdb
 C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Domain\obj\Debug\net10.0\ref\Domain.dll
-C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Domain\obj\Debug\net10.0\Domain.sourcelink.json
-C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Domain\obj\Debug\net10.0\Domain.csproj.AssemblyReference.cache

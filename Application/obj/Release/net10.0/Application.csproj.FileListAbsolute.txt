@@ -16,3 +16,5 @@ C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Application\obj\Release\net
 C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Application\obj\Release\net10.0\refint\Application.dll
 C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Application\obj\Release\net10.0\Application.pdb
 C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Application\obj\Release\net10.0\ref\Application.dll
+C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Application\bin\Release\net10.0\Shared.dll
+C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Application\bin\Release\net10.0\Shared.pdb

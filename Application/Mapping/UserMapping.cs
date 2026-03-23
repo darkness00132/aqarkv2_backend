@@ -13,6 +13,10 @@ namespace Application.Mapping
             CreateMap<UserDTO, User>().ReverseMap();
 
             CreateMap<PublicUser, User>().ReverseMap();
+
+            CreateMap<Broker, User>().ReverseMap();
+
+            CreateMap<BrokerItemList, User>().ReverseMap();
         }
     }
 }

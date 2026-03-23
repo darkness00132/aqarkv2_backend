@@ -10,32 +10,125 @@
         "tags": [
           "Ads"
         ],
+        "parameters": [
+          {
+            "name": "GovernorateId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "CityId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Type",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/AdType"
+            }
+          },
+          {
+            "name": "PropertyType",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/PropertyType"
+            }
+          },
+          {
+            "name": "State",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/AdState"
+            }
+          },
+          {
+            "name": "MinRooms",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "minBathRooms",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "MinPrice",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "MaxPrice",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "MinSpace",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "SortBy",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/AdSortBy"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AdListItemDTO"
-                  }
+                  "$ref": "#/components/schemas/AdListItemDTOListPaginationResult"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AdListItemDTO"
-                  }
+                  "$ref": "#/components/schemas/AdListItemDTOListPaginationResult"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AdListItemDTO"
-                  }
+                  "$ref": "#/components/schemas/AdListItemDTOListPaginationResult"
                 }
               }
             }
@@ -43,7 +136,138 @@
         }
       }
     },
-    "/api/Ads/{id}": {
+    "/api/Ads/me": {
+      "get": {
+        "tags": [
+          "Ads"
+        ],
+        "parameters": [
+          {
+            "name": "GovernorateId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "CityId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Type",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/AdType"
+            }
+          },
+          {
+            "name": "PropertyType",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/PropertyType"
+            }
+          },
+          {
+            "name": "State",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/AdState"
+            }
+          },
+          {
+            "name": "MinRooms",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "minBathRooms",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "MinPrice",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "MaxPrice",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "MinSpace",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "SortBy",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/AdSortBy"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdPrivateListItemDTOListPaginationResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdPrivateListItemDTOListPaginationResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdPrivateListItemDTOListPaginationResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Ads/{slug}": {
       "get": {
         "tags": [
           "Ads"
@@ -51,13 +275,6 @@
         "parameters": [
           {
             "name": "slug",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "id",
             "in": "path",
             "required": true,
             "schema": {
@@ -89,6 +306,46 @@
         }
       }
     },
+    "/api/Ads/me/{id}": {
+      "get": {
+        "tags": [
+          "Ads"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ad"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ad"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ad"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Ads/create": {
       "post": {
         "tags": [
@@ -99,7 +356,6 @@
             "multipart/form-data": {
               "schema": {
                 "required": [
-                  "AdType",
                   "CityId",
                   "Description",
                   "GovernorateId",
@@ -108,17 +364,18 @@
                   "PropertyAddress",
                   "PropertyType",
                   "Space",
-                  "Title"
+                  "Type"
                 ],
                 "type": "object",
                 "properties": {
-                  "Title": {
-                    "type": "string"
-                  },
                   "Description": {
                     "type": "string"
                   },
                   "Rooms": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Bathrooms": {
                     "type": "integer",
                     "format": "int32"
                   },
@@ -133,8 +390,11 @@
                   "PropertyAddress": {
                     "type": "string"
                   },
-                  "AdType": {
+                  "Type": {
                     "$ref": "#/components/schemas/AdType"
+                  },
+                  "State": {
+                    "$ref": "#/components/schemas/AdState"
                   },
                   "PropertyType": {
                     "$ref": "#/components/schemas/PropertyType"
@@ -148,8 +408,6 @@
                     "format": "int32"
                   },
                   "Images": {
-                    "maxItems": 5,
-                    "minItems": 1,
                     "type": "array",
                     "items": {
                       "type": "string",
@@ -159,13 +417,13 @@
                 }
               },
               "encoding": {
-                "Title": {
-                  "style": "form"
-                },
                 "Description": {
                   "style": "form"
                 },
                 "Rooms": {
+                  "style": "form"
+                },
+                "Bathrooms": {
                   "style": "form"
                 },
                 "Space": {
@@ -177,7 +435,10 @@
                 "PropertyAddress": {
                   "style": "form"
                 },
-                "AdType": {
+                "Type": {
+                  "style": "form"
+                },
+                "State": {
                   "style": "form"
                 },
                 "PropertyType": {
@@ -196,6 +457,129 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Ads/{id}": {
+      "put": {
+        "tags": [
+          "Ads"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Description": {
+                    "type": "string"
+                  },
+                  "Rooms": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "BathRooms": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Space": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "Price": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "PropertyAddress": {
+                    "type": "string"
+                  },
+                  "State": {
+                    "$ref": "#/components/schemas/AdState"
+                  },
+                  "DeletedImagesIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  },
+                  "NewImages": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              },
+              "encoding": {
+                "Description": {
+                  "style": "form"
+                },
+                "Rooms": {
+                  "style": "form"
+                },
+                "BathRooms": {
+                  "style": "form"
+                },
+                "Space": {
+                  "style": "form"
+                },
+                "Price": {
+                  "style": "form"
+                },
+                "PropertyAddress": {
+                  "style": "form"
+                },
+                "State": {
+                  "style": "form"
+                },
+                "DeletedImagesIds": {
+                  "style": "form"
+                },
+                "NewImages": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Ads"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -455,6 +839,40 @@
         }
       }
     },
+    "/api/Brokers/all": {
+      "get": {
+        "tags": [
+          "Brokers"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Brokers/{slug}": {
+      "get": {
+        "tags": [
+          "Brokers"
+        ],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Users/me": {
       "get": {
         "tags": [
@@ -470,9 +888,115 @@
   },
   "components": {
     "schemas": {
+      "Ad": {
+        "required": [
+          "cityId",
+          "description",
+          "governorateId",
+          "images",
+          "price",
+          "propertyAddress",
+          "propertyType",
+          "slug",
+          "space",
+          "type",
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "slug": {
+            "maxLength": 300,
+            "minLength": 1,
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 5000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "rooms": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "bathRooms": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "space": {
+            "type": "number",
+            "format": "double"
+          },
+          "price": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "propertyAddress": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/AdType"
+          },
+          "propertyType": {
+            "$ref": "#/components/schemas/PropertyType"
+          },
+          "state": {
+            "$ref": "#/components/schemas/AdState"
+          },
+          "governorateId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "cityId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Image"
+            },
+            "nullable": true
+          },
+          "logs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdLog"
+            },
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AdAction": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
       "AdDTO": {
         "required": [
-          "adType",
           "cityName",
           "createdAt",
           "description",
@@ -482,7 +1006,7 @@
           "propertyAddress",
           "propertyType",
           "space",
-          "title",
+          "type",
           "user"
         ],
         "type": "object",
@@ -491,12 +1015,13 @@
             "type": "string",
             "nullable": true
           },
-          "title": {
+          "description": {
             "type": "string",
             "nullable": true
           },
-          "description": {
-            "type": "string",
+          "bathRooms": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           },
           "rooms": {
@@ -516,11 +1041,15 @@
             "type": "string",
             "nullable": true
           },
-          "adType": {
+          "type": {
             "type": "string",
             "nullable": true
           },
           "propertyType": {
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
             "type": "string",
             "nullable": true
           },
@@ -551,7 +1080,6 @@
       },
       "AdListItemDTO": {
         "required": [
-          "adType",
           "cityName",
           "coverImage",
           "createdAt",
@@ -560,7 +1088,7 @@
           "propertyType",
           "slug",
           "space",
-          "title",
+          "type",
           "user"
         ],
         "type": "object",
@@ -569,11 +1097,12 @@
             "type": "string",
             "nullable": true
           },
-          "title": {
-            "type": "string",
+          "rooms": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           },
-          "rooms": {
+          "bathRooms": {
             "type": "integer",
             "format": "int32",
             "nullable": true
@@ -586,11 +1115,15 @@
             "type": "integer",
             "format": "int32"
           },
-          "adType": {
+          "type": {
             "type": "string",
             "nullable": true
           },
           "propertyType": {
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
             "type": "string",
             "nullable": true
           },
@@ -615,10 +1148,191 @@
         },
         "additionalProperties": false
       },
+      "AdListItemDTOListPaginationResult": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdListItemDTO"
+            },
+            "nullable": true
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AdLog": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "adId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ad": {
+            "$ref": "#/components/schemas/Ad"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "action": {
+            "$ref": "#/components/schemas/AdAction"
+          },
+          "description": {
+            "maxLength": 1000,
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AdPrivateListItemDTO": {
+        "required": [
+          "cityName",
+          "coverImage",
+          "createdAt",
+          "governorateName",
+          "price",
+          "propertyType",
+          "slug",
+          "space",
+          "type",
+          "user"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "slug": {
+            "type": "string",
+            "nullable": true
+          },
+          "rooms": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "bathRooms": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "space": {
+            "type": "number",
+            "format": "double"
+          },
+          "price": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "propertyType": {
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
+            "type": "string",
+            "nullable": true
+          },
+          "governorateName": {
+            "type": "string",
+            "nullable": true
+          },
+          "cityName": {
+            "type": "string",
+            "nullable": true
+          },
+          "user": {
+            "$ref": "#/components/schemas/PublicUser"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "coverImage": {
+            "$ref": "#/components/schemas/ImageDTO"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AdPrivateListItemDTOListPaginationResult": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdPrivateListItemDTO"
+            },
+            "nullable": true
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AdSortBy": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "AdState": {
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
       "AdType": {
         "enum": [
+          0,
           1,
-          2
+          2,
+          3,
+          4
         ],
         "type": "integer",
         "format": "int32"
@@ -641,12 +1355,34 @@
         },
         "additionalProperties": false
       },
-      "ImageDTO": {
+      "Image": {
         "required": [
           "url"
         ],
         "type": "object",
         "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "adId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ImageDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
           "url": {
             "type": "string",
             "nullable": true
@@ -676,6 +1412,7 @@
       },
       "PropertyType": {
         "enum": [
+          0,
           1,
           2,
           3,
@@ -683,7 +1420,13 @@
           5,
           6,
           7,
-          8
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14
         ],
         "type": "integer",
         "format": "int32"
@@ -707,6 +1450,53 @@
           "phoneNumber": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RefreshToken": {
+        "required": [
+          "createdAt",
+          "expiresAt",
+          "ipAddress",
+          "tokenHash",
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "tokenHash": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "revokedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "ipAddress": {
+            "maxLength": 45,
+            "minLength": 1,
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -765,6 +1555,159 @@
         },
         "additionalProperties": false
       },
+      "User": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "normalizedUserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "normalizedEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "emailConfirmed": {
+            "type": "boolean"
+          },
+          "passwordHash": {
+            "type": "string",
+            "nullable": true
+          },
+          "securityStamp": {
+            "type": "string",
+            "nullable": true
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumberConfirmed": {
+            "type": "boolean"
+          },
+          "twoFactorEnabled": {
+            "type": "boolean"
+          },
+          "lockoutEnd": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lockoutEnabled": {
+            "type": "boolean"
+          },
+          "accessFailedCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "slug": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "profilePhoto": {
+            "type": "string",
+            "nullable": true
+          },
+          "credits": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isProfileCompleted": {
+            "type": "boolean"
+          },
+          "refreshTokens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RefreshToken"
+            },
+            "nullable": true
+          },
+          "isBlocked": {
+            "type": "boolean"
+          },
+          "security": {
+            "$ref": "#/components/schemas/UserAccountSecurity"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserAccountSecurity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "blockedByUserId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "blockReason": {
+            "maxLength": 500,
+            "type": "string",
+            "nullable": true
+          },
+          "blockedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lastLoginIp": {
+            "maxLength": 45,
+            "type": "string",
+            "nullable": true
+          },
+          "lastLoginAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "publicRoles": {
         "enum": [
           1,
@@ -781,6 +1724,9 @@
     },
     {
       "name": "Auth"
+    },
+    {
+      "name": "Brokers"
     },
     {
       "name": "Users"

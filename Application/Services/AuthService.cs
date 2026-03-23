@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Application.Services
 {
@@ -28,7 +29,6 @@ namespace Application.Services
 
         public AuthService(
             UserManager<User> userManager,
-            SignInManager<User> signInManager,
             ITokenService tokenService, IEmailService emailService, IMapper mapper, IRefreshTokenRepo refreshTokenRepo, IUnitOfWork uow, IConfiguration config)
         {
             _userManager = userManager;
@@ -40,7 +40,7 @@ namespace Application.Services
             _config = config;
         }
 
-        public async Task ConfirmEmailAsync(string userId, string token, CancellationToken ct = default)
+        public async Task ConfirmEmailAsync(string userId, string token)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
             if (user is null) throw ApiException.NotFound("هذا المستخدم غير موجود.");
@@ -61,7 +61,7 @@ namespace Application.Services
             if (!result.Succeeded) throw ApiException.BadRequest("تعذر تأكيد البريد الإلكتروني. قد يكون الرابط منتهيًا أو غير صالح.");
         }
 
-        public async Task<string> ForgetPassword(string email, CancellationToken ct = default)
+        public async Task<string> ForgetPassword(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
             if (user is null) throw ApiException.NotFound("لا يوجد حساب بهذا البريد الإلكتروني.");
@@ -85,15 +85,18 @@ namespace Application.Services
 
             if (!googleResult.Succeeded)
             {
-                return GoogleCallbackResult.Failed($"{frontendUrl}/login?error=google_failed");
+                return GoogleCallbackResult.Failed($"{frontendUrl}/login?error={Encode("فشل تسجيل الدخول عبر Google، يرجى المحاولة مرة أخرى.")}");
             }
 
             string? email = googleResult.Principal.FindFirstValue(ClaimTypes.Email);
-            string? name = googleResult.Principal.FindFirstValue(ClaimTypes.Name);
+            string? name = googleResult.Principal.FindFirstValue(ClaimTypes.Name)
+            ?? $"{googleResult.Principal.FindFirstValue(ClaimTypes.GivenName)} {googleResult.Principal.FindFirstValue(ClaimTypes.Surname)}".Trim();
+            string? profilePhoto = googleResult.Principal.FindFirstValue("urn:google:picture");
 
             if (email == null)
             {
-                return GoogleCallbackResult.Failed($"{frontendUrl}/login?error=email_missing");
+                return GoogleCallbackResult.Failed(
+                $"{frontendUrl}/login?error={Encode("لم نتمكن من الحصول على بريدك الإلكتروني من Google، يرجى التحقق من إعدادات حسابك.")}");
             }
 
             // find or create user
@@ -107,10 +110,16 @@ namespace Application.Services
                     Name = name,
                     UserName = email,
                     Email = email,
-                    IsProfileCompleted = false
+                    IsProfileCompleted = false,
+                    Slug = GenerateSlug(name),
+                    EmailConfirmed=true,
+                    ProfilePhoto= profilePhoto
                 };
 
-                await _userManager.CreateAsync(user);
+                var createResult = await _userManager.CreateAsync(user);
+                if (!createResult.Succeeded)
+                    return GoogleCallbackResult.Failed(
+              $"{frontendUrl}/login?error={Encode("حدث خطأ أثناء إنشاء حسابك، يرجى المحاولة مرة أخرى.")}");
             }
 
             string refreshToken = await GenerateRefreshToken(user, ip:"Unknown");
@@ -120,6 +129,7 @@ namespace Application.Services
             int ExpiresAt = _config.GetValue<int>("Jwt:RefreshTokenLifetimeDays");
 
             return GoogleCallbackResult.Successed(
+                user.Id,
                 refreshToken,
                 DateTime.UtcNow.AddDays(ExpiresAt),
                 user.IsProfileCompleted ?
@@ -128,7 +138,7 @@ namespace Application.Services
             );
         }
 
-        public async Task<LoginResponse> LoginAsync(LoginDTO userDTO, string ip, CancellationToken ct = default)
+        public async Task<LoginResponse> LoginAsync(LoginDTO userDTO, string ip)
         {
             User? user = await _userManager.FindByEmailAsync(userDTO.Email);
 
@@ -147,57 +157,58 @@ namespace Application.Services
             return new LoginResponse { AccessToken = accessToken, RefreshToken = rawRefresh };
         }
 
-        public async Task<LoginResponse> RefreshAsync(string rawRefreshToken, string ip, CancellationToken ct = default)
+        public async Task<LoginResponse> RefreshAsync(string rawRefreshToken, string ip)
         {
             if (string.IsNullOrWhiteSpace(rawRefreshToken))
                 throw ApiException.Unauthorized("انتهت الجلسة. برجاء تسجيل الدخول مرة أخرى.");
 
             string hashToken = Hash(rawRefreshToken);
 
-            await using var tx = await _uow.BeginTransactionAsync(ct);
+            await using var tx = await _uow.BeginTransactionAsync();
 
-            RefreshToken? stored = await _refreshTokenRepo.GetByHashAsync(hashToken, ct);
+            RefreshToken? stored = await _refreshTokenRepo.GetByHashAsync(hashToken);
 
             RefreshTokenValidator.Validate(stored);
+            if (stored?.User is null) throw ApiException.Unauthorized("الجلسة غير صالحة. برجاء تسجيل الدخول مرة أخرى.");
 
             // Use a single timestamp for consistency
             var utcNow = DateTime.UtcNow;
 
             //Revoke old token
-            stored!.RevokedAt = utcNow;
+            stored.RevokedAt = utcNow;
 
             //Create new Refresh Token
             string newRefreshToken = await GenerateRefreshToken(stored.User, ip);
 
-            await _uow.SaveChangesAsync(ct);
-            await tx.CommitAsync(ct);
-
-            if (stored.User is null) throw ApiException.Unauthorized("الجلسة غير صالحة. برجاء تسجيل الدخول مرة أخرى.");
+            await _uow.SaveChangesAsync();
+            await tx.CommitAsync();
 
             var access = await CreateAccessToken(stored.User);
 
             return new LoginResponse { RefreshToken = newRefreshToken, AccessToken = access };
         }
 
-        public async Task RegisterAsync(RegisterDTO userDTO, CancellationToken ct = default)
+        public async Task RegisterAsync(RegisterDTO userDTO)
         {
+            await using var tx = await _uow.BeginTransactionAsync();
+
             var user = _mapper.Map<User>(userDTO);
-            user.IsProfileCompleted = true;
+            user.Slug = GenerateSlug(user.Name);
 
             var result = await _userManager.CreateAsync(user, userDTO.Password);
-
             if (!result.Succeeded)
-            {
-                var msg = string.Join(" | ", result.Errors.Select(e => e.Description));
-                throw ApiException.Conflict(msg);
-            }
+                throw ApiException.Conflict(string.Join(" | ", result.Errors.Select(e => e.Description)));
 
-            await _userManager.AddToRoleAsync(user, userDTO.Role.ToString());
+            var roleResult = await _userManager.AddToRoleAsync(user, userDTO.Role.ToString());
+            if (!roleResult.Succeeded)
+                throw ApiException.Conflict(string.Join(" | ", roleResult.Errors.Select(e => e.Description)));
 
-            string token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            string encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
-            await _emailService.SendValidationEmailAsync("delivered@resend.dev", encodedToken, user.Id);
+            await _emailService.SendValidationEmailAsync(user.Email!, encodedToken, user.Id);
+
+            await tx.CommitAsync();
         }
 
         public async Task ResetPassword(ResetPasswordDTO resetPasswordDTO)
@@ -223,31 +234,31 @@ namespace Application.Services
             await _userManager.UpdateSecurityStampAsync(user);
         }
 
-        public async Task RevokeAllAsync(string userId, CancellationToken ct = default)
+        public async Task RevokeAllAsync(string userId)
         {
             if (!Guid.TryParse(userId, out var uid))
                 throw ApiException.BadRequest("معرّف المستخدم غير صحيح.");
 
-            var tokens = await _refreshTokenRepo.GetActiveByUserAsync(uid, ct);
+            var tokens = await _refreshTokenRepo.GetActiveByUserAsync(uid);
             if (tokens.Count == 0) return;
 
             var now = DateTime.UtcNow;
             foreach (var t in tokens) t.RevokedAt = now;
 
-            await _uow.SaveChangesAsync(ct);
+            await _uow.SaveChangesAsync();
         }
 
-        public async Task RevokeCurrentAsync(string rawRefreshToken, CancellationToken ct = default)
+        public async Task RevokeCurrentAsync(string rawRefreshToken)
         {
             if (string.IsNullOrWhiteSpace(rawRefreshToken))
                 return;
 
             var hash = Hash(rawRefreshToken);
-            var stored = await _refreshTokenRepo.GetByHashAsync(hash, ct);
+            var stored = await _refreshTokenRepo.GetByHashAsync(hash);
             if (stored is null) return;
 
             stored.RevokedAt = DateTime.UtcNow;
-            await _uow.SaveChangesAsync(ct);
+            await _uow.SaveChangesAsync();
         }
 
         private string Hash(string raw)
@@ -269,12 +280,13 @@ namespace Application.Services
         {
             string rawRefresh = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
             string hash = Hash(rawRefresh);
+            int lifetimeDays = _config.GetValue<int>("Jwt:RefreshTokenLifetimeDays");
 
             var refreshToken = new RefreshToken
             {
                 UserId = user.Id,
                 TokenHash = hash,
-                ExpiresAt = DateTime.UtcNow.AddDays(7),
+                ExpiresAt = DateTime.UtcNow.AddDays(lifetimeDays),
                 CreatedAt = DateTime.UtcNow,
                 IpAddress = ip
             };
@@ -283,18 +295,43 @@ namespace Application.Services
             return rawRefresh;
         }
 
-        public async Task HandleCompleteProfileAsync(CompleteProfileDTO userDTO,string? userId, CancellationToken ct = default)
+        public async Task HandleCompleteProfileAsync(CompleteProfileDTO userDTO, string? userId)
         {
-            if (userId is null) ApiException.Unauthorized();
+            if (userId is null) throw ApiException.Unauthorized();
 
             var user = await _userManager.FindByIdAsync(userId);
-            if (user is null) ApiException.NotFound("هذا حساب غير موجود");
+            if (user is null) throw ApiException.NotFound("هذا حساب غير موجود");
 
             user.IsProfileCompleted = true;
             user.PhoneNumber = userDTO.PhoneNumber;
-            await _userManager.AddToRoleAsync(user, userDTO.Role.ToString());
 
-            await _uow.SaveChangesAsync(ct);
+            var updateResult = await _userManager.UpdateAsync(user);
+            if (!updateResult.Succeeded)
+                throw ApiException.Conflict(string.Join(" | ", updateResult.Errors.Select(e => e.Description)));
+
+            var roleResult = await _userManager.AddToRoleAsync(user, userDTO.Role.ToString());
+            if (!roleResult.Succeeded)
+                throw ApiException.Conflict(string.Join(" | ", roleResult.Errors.Select(e => e.Description)));
         }
+
+        private string GenerateSlug(string name) 
+        {
+            string slug = name ?? "user";
+
+            // remove tashkeel
+            slug = Regex.Replace(slug, @"[\u0610-\u061A\u064B-\u065F]", "");
+
+            // replace spaces with hyphens
+            slug = Regex.Replace(slug, @"\s+", "-");
+
+            // keep arabic letters, latin letters, numbers and hyphens
+            slug = Regex.Replace(slug, @"[^\u0600-\u06FF\w-]", "");
+
+            // remove duplicate hyphens
+            slug = Regex.Replace(slug, @"-+", "-").Trim('-');
+
+            return slug + "-" + Guid.NewGuid().ToString()[..8];
+        }
+        private static string Encode(string message) => Uri.EscapeDataString(message);
     }
 }

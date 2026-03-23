@@ -1,11 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Infrastructure.Presistance;
-using Microsoft.Extensions.Configuration;
-using Microsoft.EntityFrameworkCore;
+﻿using Domain.Enums;
 using Domain.Identity;
-using Microsoft.AspNetCore.Identity;
-using Infrastructure.Repositories;
 using Infrastructure.Interfaces;
+using Infrastructure.Presistance;
+using Infrastructure.Repositories;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure
 {
@@ -15,7 +16,18 @@ namespace Infrastructure
         {
             string connectionString = config.GetConnectionString("Default") ?? throw new Exception("Connection string cannot be empty");
 
-            service.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
+
+            service.AddDbContext<AppDbContext>(options => 
+                options.UseNpgsql(connectionString, o =>
+                {
+                    o.MapEnum<AdType>();
+                    o.MapEnum<AdState>();
+                    o.MapEnum<PropertyType>();
+                    o.MapEnum<AdAction>();
+                    o.MapEnum<CreditsLogAction>();
+                    o.MapEnum<PaymentStatus>();
+                })
+            );
             service.AddDataProtection();
             service.AddIdentity<User,Role>(options =>
             {
@@ -33,6 +45,10 @@ namespace Infrastructure
             service.AddScoped<IUnitOfWork, UnitOfWork>();
             service.AddScoped<IImageRepo, ImageRepo>();
             service.AddScoped<IAdRepo, AdRepo>();
+            service.AddScoped<IAdLogRepo, AdLogRepo>();
+            service.AddScoped<ICreditsLogRepo, CreditsLogRepo>();
+            service.AddScoped<ICreditsRepo, CreditsRepo>();
+            service.AddScoped<IBrokerRepo, BrokerRepo>();
 
             return service;
         }

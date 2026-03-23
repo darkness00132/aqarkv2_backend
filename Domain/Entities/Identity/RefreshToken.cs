@@ -1,19 +1,29 @@
-﻿    using Domain.Identity;
-    using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-    namespace Domain.Identity
+namespace Domain.Identity
+{
+    [Index(nameof(TokenHash), IsUnique = true)]
+    [Index(nameof(UserId))]
+    public class RefreshToken
     {
-        public class RefreshToken
-        {
-            public int Id { get; set; }
+        public int Id { get; set; }
 
-            [ForeignKey(nameof(User))]
-            public required Guid UserId { get; set; }
-            public User? User { get; set; }
-            public required string TokenHash { get; set; }
-            public required DateTime ExpiresAt { get; set; }
-            public required DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-            public DateTime? RevokedAt { get; set; }
-            public required string IpAddress { get; set; }
-        }
+        public required Guid UserId { get; set; }
+        public User? User { get; set; }
+
+        [Required]
+        [MaxLength(500)]
+        public required string TokenHash { get; set; }
+
+        public required DateTime ExpiresAt { get; set; }
+        public required DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? RevokedAt { get; set; }
+
+        [Required]
+        [MaxLength(45)]
+        public required string IpAddress { get; set; }
     }
+}

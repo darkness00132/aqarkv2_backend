@@ -1,6 +1,4 @@
-﻿using Application.DTOs.Image;
-using Application.DTOs.User;
-using Domain.Entities;
+﻿using Application.DTOs.User;
 
 namespace Application.DTOs.Ad
 {
@@ -8,9 +6,9 @@ namespace Application.DTOs.Ad
     {
         public string Slug { get; set; } = string.Empty;
 
-        public required string Title { get; set; }
-
         public required string Description { get; set; }
+
+        public int? BathRooms { get; set; }
 
         public int? Rooms { get; set; }
 
@@ -20,9 +18,11 @@ namespace Application.DTOs.Ad
 
         public required string PropertyAddress { get; set; }
 
-        public required string AdType { get; set; }
+        public required string Type { get; set; }
 
         public required string PropertyType { get; set; }
+
+        public string? State { get; set; }
 
         public required PublicUser User { get; set; }
 
@@ -32,6 +32,6 @@ namespace Application.DTOs.Ad
 
         public required List<ImageDTO> Images { get; set; }
 
-        public required DateTime CreatedAt { get; set; }
+        public required DateTimeOffset CreatedAt { get; set; }
     }
 }

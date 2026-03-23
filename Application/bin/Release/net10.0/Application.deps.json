@@ -8,98 +8,108 @@
     ".NETCoreApp,Version=v10.0": {
       "Application/1.0.0": {
         "dependencies": {
-          "AutoMapper": "16.0.0",
-          "CloudinaryDotNet": "1.28.0",
+          "AWSSDK.S3": "4.0.19.1",
+          "AutoMapper": "16.1.1",
           "Domain": "1.0.0",
           "Infrastructure": "1.0.0",
-          "Microsoft.AspNetCore.Authentication.Google": "10.0.3",
-          "Microsoft.AspNetCore.Authentication.JwtBearer": "10.0.3",
-          "Resend": "0.2.1",
+          "Microsoft.AspNetCore.Authentication.Google": "10.0.5",
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "10.0.5",
+          "Resend": "0.2.2",
+          "Shared": "1.0.0",
+          "SixLabors.ImageSharp": "3.1.12",
           "System.IdentityModel.Tokens.Jwt": "8.16.0"
         },
         "runtime": {
           "Application.dll": {}
         }
       },
-      "AutoMapper/16.0.0": {
+      "AutoMapper/16.1.1": {
         "dependencies": {
           "Microsoft.IdentityModel.JsonWebTokens": "8.16.0"
         },
         "runtime": {
           "lib/net10.0/AutoMapper.dll": {
             "assemblyVersion": "16.0.0.0",
-            "fileVersion": "16.0.0.0"
+            "fileVersion": "16.1.1.0"
           }
         }
       },
-      "CloudinaryDotNet/1.28.0": {
+      "AWSSDK.Core/4.0.3.19": {
+        "runtime": {
+          "lib/net8.0/AWSSDK.Core.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.3.19"
+          }
+        }
+      },
+      "AWSSDK.S3/4.0.19.1": {
         "dependencies": {
-          "Newtonsoft.Json": "13.0.3"
+          "AWSSDK.Core": "4.0.3.19"
         },
         "runtime": {
-          "lib/netstandard2.0/CloudinaryDotNet.dll": {
-            "assemblyVersion": "1.28.0.0",
-            "fileVersion": "1.28.0.0"
+          "lib/net8.0/AWSSDK.S3.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.19.1"
           }
         }
       },
-      "Microsoft.AspNetCore.Authentication.Google/10.0.3": {
+      "Microsoft.AspNetCore.Authentication.Google/10.0.5": {
         "runtime": {
           "lib/net10.0/Microsoft.AspNetCore.Authentication.Google.dll": {
-            "assemblyVersion": "10.0.3.0",
-            "fileVersion": "10.0.326.7603"
+            "assemblyVersion": "10.0.5.0",
+            "fileVersion": "10.0.526.15411"
           }
         }
       },
-      "Microsoft.AspNetCore.Authentication.JwtBearer/10.0.3": {
+      "Microsoft.AspNetCore.Authentication.JwtBearer/10.0.5": {
         "dependencies": {
           "Microsoft.IdentityModel.Protocols.OpenIdConnect": "8.0.1"
         },
         "runtime": {
           "lib/net10.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll": {
-            "assemblyVersion": "10.0.3.0",
-            "fileVersion": "10.0.326.7603"
+            "assemblyVersion": "10.0.5.0",
+            "fileVersion": "10.0.526.15411"
           }
         }
       },
-      "Microsoft.AspNetCore.Identity.EntityFrameworkCore/10.0.3": {
+      "Microsoft.AspNetCore.Identity.EntityFrameworkCore/10.0.5": {
         "dependencies": {
-          "Microsoft.EntityFrameworkCore.Relational": "10.0.3"
+          "Microsoft.EntityFrameworkCore.Relational": "10.0.5"
         },
         "runtime": {
           "lib/net10.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll": {
-            "assemblyVersion": "10.0.3.0",
-            "fileVersion": "10.0.326.7603"
+            "assemblyVersion": "10.0.5.0",
+            "fileVersion": "10.0.526.15411"
           }
         }
       },
-      "Microsoft.EntityFrameworkCore/10.0.3": {
+      "Microsoft.EntityFrameworkCore/10.0.5": {
         "dependencies": {
-          "Microsoft.EntityFrameworkCore.Abstractions": "10.0.3"
+          "Microsoft.EntityFrameworkCore.Abstractions": "10.0.5"
         },
         "runtime": {
           "lib/net10.0/Microsoft.EntityFrameworkCore.dll": {
-            "assemblyVersion": "10.0.3.0",
-            "fileVersion": "10.0.326.7603"
+            "assemblyVersion": "10.0.5.0",
+            "fileVersion": "10.0.526.15411"
           }
         }
       },
-      "Microsoft.EntityFrameworkCore.Abstractions/10.0.3": {
+      "Microsoft.EntityFrameworkCore.Abstractions/10.0.5": {
         "runtime": {
           "lib/net10.0/Microsoft.EntityFrameworkCore.Abstractions.dll": {
-            "assemblyVersion": "10.0.3.0",
-            "fileVersion": "10.0.326.7603"
+            "assemblyVersion": "10.0.5.0",
+            "fileVersion": "10.0.526.15411"
           }
         }
       },
-      "Microsoft.EntityFrameworkCore.Relational/10.0.3": {
+      "Microsoft.EntityFrameworkCore.Relational/10.0.5": {
         "dependencies": {
-          "Microsoft.EntityFrameworkCore": "10.0.3"
+          "Microsoft.EntityFrameworkCore": "10.0.5"
         },
         "runtime": {
           "lib/net10.0/Microsoft.EntityFrameworkCore.Relational.dll": {
-            "assemblyVersion": "10.0.3.0",
-            "fileVersion": "10.0.326.7603"
+            "assemblyVersion": "10.0.5.0",
+            "fileVersion": "10.0.526.15411"
           }
         }
       },
@@ -167,40 +177,40 @@
           }
         }
       },
-      "Newtonsoft.Json/13.0.3": {
-        "runtime": {
-          "lib/net6.0/Newtonsoft.Json.dll": {
-            "assemblyVersion": "13.0.0.0",
-            "fileVersion": "13.0.3.27908"
-          }
-        }
-      },
-      "Npgsql/10.0.0": {
+      "Npgsql/10.0.2": {
         "runtime": {
           "lib/net10.0/Npgsql.dll": {
-            "assemblyVersion": "10.0.0.0",
-            "fileVersion": "10.0.0.0"
+            "assemblyVersion": "10.0.2.0",
+            "fileVersion": "10.0.2.0"
           }
         }
       },
-      "Npgsql.EntityFrameworkCore.PostgreSQL/10.0.0": {
+      "Npgsql.EntityFrameworkCore.PostgreSQL/10.0.1": {
         "dependencies": {
-          "Microsoft.EntityFrameworkCore": "10.0.3",
-          "Microsoft.EntityFrameworkCore.Relational": "10.0.3",
-          "Npgsql": "10.0.0"
+          "Microsoft.EntityFrameworkCore": "10.0.5",
+          "Microsoft.EntityFrameworkCore.Relational": "10.0.5",
+          "Npgsql": "10.0.2"
         },
         "runtime": {
           "lib/net10.0/Npgsql.EntityFrameworkCore.PostgreSQL.dll": {
-            "assemblyVersion": "10.0.0.0",
-            "fileVersion": "10.0.0.0"
+            "assemblyVersion": "10.0.1.0",
+            "fileVersion": "10.0.1.0"
           }
         }
       },
-      "Resend/0.2.1": {
+      "Resend/0.2.2": {
         "runtime": {
           "lib/net8.0/Resend.dll": {
-            "assemblyVersion": "0.2.1.0",
-            "fileVersion": "0.2.1.0"
+            "assemblyVersion": "0.2.2.0",
+            "fileVersion": "0.2.2.0"
+          }
+        }
+      },
+      "SixLabors.ImageSharp/3.1.12": {
+        "runtime": {
+          "lib/net6.0/SixLabors.ImageSharp.dll": {
+            "assemblyVersion": "3.0.0.0",
+            "fileVersion": "3.1.12.0"
           }
         }
       },
@@ -217,6 +227,9 @@
         }
       },
       "Domain/1.0.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "10.0.5"
+        },
         "runtime": {
           "Domain.dll": {
             "assemblyVersion": "1.0.0.0",
@@ -227,11 +240,22 @@
       "Infrastructure/1.0.0": {
         "dependencies": {
           "Domain": "1.0.0",
-          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "10.0.3",
-          "Npgsql.EntityFrameworkCore.PostgreSQL": "10.0.0"
+          "Npgsql.EntityFrameworkCore.PostgreSQL": "10.0.1",
+          "Shared": "1.0.0"
         },
         "runtime": {
           "Infrastructure.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Shared/1.0.0": {
+        "dependencies": {
+          "Domain": "1.0.0"
+        },
+        "runtime": {
+          "Shared.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -245,61 +269,68 @@
       "serviceable": false,
       "sha512": ""
     },
-    "AutoMapper/16.0.0": {
+    "AutoMapper/16.1.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-JIhkKjEsUcIPPbCR7cGQlH3a2ySLW2Tof6CXcJb5WbaoUkniREpJOlC2ROkaM/nck2b5JjptLIUdHvbItGvLGQ==",
-      "path": "automapper/16.0.0",
-      "hashPath": "automapper.16.0.0.nupkg.sha512"
+      "sha512": "sha512-VNEky8JA15ci+oIDRGHITOGOpV4dILsf8pnn24QhDl2urtqgJ2IXiS/V2EtGU17P/+f6OeFQPJETaZXV9QOIZg==",
+      "path": "automapper/16.1.1",
+      "hashPath": "automapper.16.1.1.nupkg.sha512"
     },
-    "CloudinaryDotNet/1.28.0": {
+    "AWSSDK.Core/4.0.3.19": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-o5Dfp5DrpF69s8qjlh4dxzXuJUCRxt7KQaweU8wMDxd1cPFONCVNZsgFQZ3v0PZDN76fLonZ5vFDjVTA3UTjCA==",
-      "path": "cloudinarydotnet/1.28.0",
-      "hashPath": "cloudinarydotnet.1.28.0.nupkg.sha512"
+      "sha512": "sha512-8zIzN59+J6arYSyFuhnSxPepr8ff4p6li+MxKUUnqCgwZqQ+icEGJK/23c1USIEALqZZ5gdiITuH2sOZWQom+Q==",
+      "path": "awssdk.core/4.0.3.19",
+      "hashPath": "awssdk.core.4.0.3.19.nupkg.sha512"
     },
-    "Microsoft.AspNetCore.Authentication.Google/10.0.3": {
+    "AWSSDK.S3/4.0.19.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-yQa/PjN0tPgjDvT96J7ZlEpJ/KzL99MGVJIXPWJw3byVZZdEf5ahsZMtGhJGf7spy2tSWl8ULNdu2ZuKo4+2QA==",
-      "path": "microsoft.aspnetcore.authentication.google/10.0.3",
-      "hashPath": "microsoft.aspnetcore.authentication.google.10.0.3.nupkg.sha512"
+      "sha512": "sha512-DCTFohRB53/g2kaz7cUX3ZTyFTbRErj5JvT4HrquKTvXvUpY/vUyUMGEVWoC0UXmxalYaPAR8tO7WgEJRJjM9w==",
+      "path": "awssdk.s3/4.0.19.1",
+      "hashPath": "awssdk.s3.4.0.19.1.nupkg.sha512"
     },
-    "Microsoft.AspNetCore.Authentication.JwtBearer/10.0.3": {
+    "Microsoft.AspNetCore.Authentication.Google/10.0.5": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-TBDs8e9y2vJHp14EwNfnIZUNrm6siw8PAAU5laOrYFuGgRxx8oCdxZyfTgp1Oy/icUk9h/XtpYBHPnXIG0f2/g==",
-      "path": "microsoft.aspnetcore.authentication.jwtbearer/10.0.3",
-      "hashPath": "microsoft.aspnetcore.authentication.jwtbearer.10.0.3.nupkg.sha512"
+      "sha512": "sha512-y0Y04EYL1VwhuIQvnpjD5XoECl8EEPeXtBiveDXpsh9q3TnWDAfDuLJDp+LrCmOx9jbp23b6SAEBMmVO7zRtNQ==",
+      "path": "microsoft.aspnetcore.authentication.google/10.0.5",
+      "hashPath": "microsoft.aspnetcore.authentication.google.10.0.5.nupkg.sha512"
     },
-    "Microsoft.AspNetCore.Identity.EntityFrameworkCore/10.0.3": {
+    "Microsoft.AspNetCore.Authentication.JwtBearer/10.0.5": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-6SEGWi35DZ9syBqCT8v5vEkm9tWUayWxVkHWLwW2FdyXSwS0zzEpIzGPLVQGeug3VU8d+hK/PFxFwwZnblv/zA==",
-      "path": "microsoft.aspnetcore.identity.entityframeworkcore/10.0.3",
-      "hashPath": "microsoft.aspnetcore.identity.entityframeworkcore.10.0.3.nupkg.sha512"
+      "sha512": "sha512-fZzXogChrwQ/SfifQJgeW7AtR8hUv5+LH9oLWjm5OqfnVt3N8MwcMHHMdawvqqdjP79lIZgetnSpj77BLsSI1g==",
+      "path": "microsoft.aspnetcore.authentication.jwtbearer/10.0.5",
+      "hashPath": "microsoft.aspnetcore.authentication.jwtbearer.10.0.5.nupkg.sha512"
     },
-    "Microsoft.EntityFrameworkCore/10.0.3": {
+    "Microsoft.AspNetCore.Identity.EntityFrameworkCore/10.0.5": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-CDEImwD4A7BseABJMCpLZnhfFjmPY/bHwhhS70elc6gLI/bYUEOhxWt7PmaNGYGhIEzOnStlCy5QcVb+8dod5Q==",
-      "path": "microsoft.entityframeworkcore/10.0.3",
-      "hashPath": "microsoft.entityframeworkcore.10.0.3.nupkg.sha512"
+      "sha512": "sha512-oo1uauTwgcnhYgituZ2nI3wJ8XN9z76ggu2zkOJu1BCfOOsqr+g08Kr4MOiMuXEhwySkpIV+MVoC25hC1288NA==",
+      "path": "microsoft.aspnetcore.identity.entityframeworkcore/10.0.5",
+      "hashPath": "microsoft.aspnetcore.identity.entityframeworkcore.10.0.5.nupkg.sha512"
     },
-    "Microsoft.EntityFrameworkCore.Abstractions/10.0.3": {
+    "Microsoft.EntityFrameworkCore/10.0.5": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-c7Uoz381xnMHNBRB8eHRhGgzUtXbgddlbODhwZRrTSzZWDharp3RkJsFwhxyESbeXhCqmML7VdvjMQ7uu+HreA==",
-      "path": "microsoft.entityframeworkcore.abstractions/10.0.3",
-      "hashPath": "microsoft.entityframeworkcore.abstractions.10.0.3.nupkg.sha512"
+      "sha512": "sha512-9tNBmK3EpYVGRQLiqP+bqK2m+TD0Gv//4vCzR7ZOgl4FWzCFyOpYdIVka13M4kcBdPdSJcs3wbHr3rmzOqbIMA==",
+      "path": "microsoft.entityframeworkcore/10.0.5",
+      "hashPath": "microsoft.entityframeworkcore.10.0.5.nupkg.sha512"
     },
-    "Microsoft.EntityFrameworkCore.Relational/10.0.3": {
+    "Microsoft.EntityFrameworkCore.Abstractions/10.0.5": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-Pmh60OK9neVr/M0FJwm9hlzm2bD4Kd65SID8E6SP5c90tExNgXwORrlEWl0oGU/ig9ifpNN4PSpIrnHNozlT5w==",
-      "path": "microsoft.entityframeworkcore.relational/10.0.3",
-      "hashPath": "microsoft.entityframeworkcore.relational.10.0.3.nupkg.sha512"
+      "sha512": "sha512-32c58Rnm47Qvhimawf67KO9PytgPz3QoWye7Abapt0Yocw/JnzMiSNj/pRoIKyn8Jxypkv86zxKD4Q/zNTc0Ag==",
+      "path": "microsoft.entityframeworkcore.abstractions/10.0.5",
+      "hashPath": "microsoft.entityframeworkcore.abstractions.10.0.5.nupkg.sha512"
+    },
+    "Microsoft.EntityFrameworkCore.Relational/10.0.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-uxmFjZEAB/KbsgWFSS4lLqkEHCfXxB2x0UcbiO4e5fCRpFFeTMSx/me6009nYJLu5IKlDwO1POh++P6RilFTDw==",
+      "path": "microsoft.entityframeworkcore.relational/10.0.5",
+      "hashPath": "microsoft.entityframeworkcore.relational.10.0.5.nupkg.sha512"
     },
     "Microsoft.IdentityModel.Abstractions/8.16.0": {
       "type": "package",
@@ -343,33 +374,33 @@
       "path": "microsoft.identitymodel.tokens/8.16.0",
       "hashPath": "microsoft.identitymodel.tokens.8.16.0.nupkg.sha512"
     },
-    "Newtonsoft.Json/13.0.3": {
+    "Npgsql/10.0.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ==",
-      "path": "newtonsoft.json/13.0.3",
-      "hashPath": "newtonsoft.json.13.0.3.nupkg.sha512"
+      "sha512": "sha512-q5RfBI+wywJSFUNDE1L4ZbHEHCFTblo8Uf6A6oe4feOUFYiUQXyAf9GBh5qEZpvJaHiEbpBPkQumjEhXCJxdrg==",
+      "path": "npgsql/10.0.2",
+      "hashPath": "npgsql.10.0.2.nupkg.sha512"
     },
-    "Npgsql/10.0.0": {
+    "Npgsql.EntityFrameworkCore.PostgreSQL/10.0.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-xZAYhPOU2rUIFpV48xsqhCx9vXs6Y+0jX2LCoSEfDFYMw9jtAOUk3iQsCnDLrFIv9NT3JGMihn7nnuZsPKqJmA==",
-      "path": "npgsql/10.0.0",
-      "hashPath": "npgsql.10.0.0.nupkg.sha512"
+      "sha512": "sha512-P6EwH0Q4xkaA264iNZDqCPhWt8pscfUGxXazDQg4noBfqjoOlk4hKWfvBjF9ZX3R/9JybRmmJfmxr2iBMj0EpA==",
+      "path": "npgsql.entityframeworkcore.postgresql/10.0.1",
+      "hashPath": "npgsql.entityframeworkcore.postgresql.10.0.1.nupkg.sha512"
     },
-    "Npgsql.EntityFrameworkCore.PostgreSQL/10.0.0": {
+    "Resend/0.2.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-E2+uSWxSB8LdsUVwPaqRWOcGOP92biry2JEwc0KJMdLJF+aZdczeIdEXVwEyv4nSVMQJH0o8tLhyAMiR6VF0lw==",
-      "path": "npgsql.entityframeworkcore.postgresql/10.0.0",
-      "hashPath": "npgsql.entityframeworkcore.postgresql.10.0.0.nupkg.sha512"
+      "sha512": "sha512-ShD+CpKtgBCTLGeJfyf/ivQP8mcm6BMcjSf64DqJ9nGsXNvBseIorpaK4KtFiJc6/IBXD5DWjJedusWP86zLuQ==",
+      "path": "resend/0.2.2",
+      "hashPath": "resend.0.2.2.nupkg.sha512"
     },
-    "Resend/0.2.1": {
+    "SixLabors.ImageSharp/3.1.12": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-KE+irutvTpJsXUDSnYVlNVZuQb/MGrYGZ6IKVZ3FusRz64tlN0zHjWreAPE5UpqU/lLMg34n4WyoPdetTQCLHw==",
-      "path": "resend/0.2.1",
-      "hashPath": "resend.0.2.1.nupkg.sha512"
+      "sha512": "sha512-iAg6zifihXEFS/t7fiHhZBGAdCp3FavsF4i2ZIDp0JfeYeDVzvmlbY1CNhhIKimaIzrzSi5M/NBFcWvZT2rB/A==",
+      "path": "sixlabors.imagesharp/3.1.12",
+      "hashPath": "sixlabors.imagesharp.3.1.12.nupkg.sha512"
     },
     "System.IdentityModel.Tokens.Jwt/8.16.0": {
       "type": "package",
@@ -384,6 +415,11 @@
       "sha512": ""
     },
     "Infrastructure/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Shared/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

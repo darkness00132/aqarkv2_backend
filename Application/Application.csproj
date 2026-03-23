@@ -8,8 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="16.1.1" />
-    <PackageReference Include="AWSSDK.S3" Version="4.0.19" />
-    <PackageReference Include="CloudinaryDotNet" Version="1.28.0" />
+    <PackageReference Include="AWSSDK.S3" Version="4.0.19.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="10.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.5" />
     <PackageReference Include="Resend" Version="0.2.2" />
@@ -20,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>
 
 </Project>

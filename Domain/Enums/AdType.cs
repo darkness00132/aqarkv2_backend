@@ -1,20 +1,30 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Domain.Enums
+﻿namespace Domain.Enums
 {
     public enum AdType
     {
-        Rent=1,
-        Sale=2
+        RentMonthly,
+        RentYearly,
+        RentSeasonal,
+        SaleCash,
+        SaleInstallment,
     }
 
     public static class AdTypeExtensions
     {
         public static string ToArabic(this AdType adType) => adType switch
         {
-            AdType.Rent => "ايجار",
-            AdType.Sale => "بيع",
-            _ => throw new ArgumentOutOfRangeException()
+            AdType.RentMonthly => "إيجار شهري",
+            AdType.RentYearly => "إيجار سنوي",
+            AdType.RentSeasonal => "إيجار موسمي",
+            AdType.SaleCash => "بيع كاش",
+            AdType.SaleInstallment => "بيع بالتقسيط",
+            _ => throw new ArgumentOutOfRangeException(nameof(adType), adType, null)
         };
+
+        public static bool IsRent(this AdType adType) =>
+            adType is AdType.RentMonthly or AdType.RentYearly or AdType.RentSeasonal;
+
+        public static bool IsSale(this AdType adType) =>
+            adType is AdType.SaleCash or AdType.SaleInstallment;
     }
 }

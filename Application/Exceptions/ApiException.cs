@@ -16,5 +16,6 @@ namespace Application.Exceptions
         public static ApiException Unauthorized(string msg= "غير مصرح. برجاء تسجيل الدخول ثم المحاولة مرة أخرى.") => new (401, msg);
         public static ApiException Forbidden(string msg="ليس لديك صلاحية لإتمام هذا الإجراء.") => new (403, msg);
         public static ApiException Conflict(string msg="حدث تعارض في البيانات. قد يكون الطلب مكررًا أو البيانات موجودة بالفعل.") => new(409, msg);
+        public static ApiException InternalServerError(string msg = "حدث خطأ داخلي في الخادم، يرجى المحاولة لاحقاً.") => new(500, msg);
     }
 }

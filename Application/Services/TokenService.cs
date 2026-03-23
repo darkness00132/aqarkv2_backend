@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.Exceptions;
+using Application.Interfaces;
 using Application.Options;
 using Domain.Identity;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +21,12 @@ namespace Application.Services
 
         public string CreateJwtToken(User user, IList<string> roles)
         {
+            if (!user.EmailConfirmed)
+                throw ApiException.Unauthorized("يجب تأكيد بريدك الإلكتروني أولاً قبل تسجيل الدخول.");
+
+            if (!user.IsProfileCompleted)
+                throw ApiException.Unauthorized("يرجى إكمال بيانات ملفك الشخصي للمتابعة.");
+
             var jwtOptions = _config.GetSection("Jwt").Get<JwtOptions>()?? throw new Exception("Missing JWT configuration section.");
 
             //add user id in jwt token

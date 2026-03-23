@@ -7,12 +7,14 @@ namespace Application.DTOs.Ad
 {
     public class CreateAdDTO
     {
-        public required string Title { get; set; }
 
         public required string Description { get; set; }
 
         [RequiredIfPropertyHasRooms]
         public int? Rooms { get; set; }
+
+        [RequiredIfPropertyHasRooms]
+        public int? Bathrooms { get; set; }
 
         public required double Space { get; set; }
 
@@ -20,7 +22,10 @@ namespace Application.DTOs.Ad
 
         public required string PropertyAddress { get; set; }
 
-        public required AdType AdType { get; set; }
+        public required AdType Type { get; set; }
+
+        [RequiredIfPropertyHasRooms]
+        public AdState? State { get; set; }
 
         public required PropertyType PropertyType { get; set; }
 
@@ -28,9 +33,7 @@ namespace Application.DTOs.Ad
 
         public required int CityId { get; set; }
 
-        [MinLength(1, ErrorMessage = "يجب ارفاق صورة واحدة على الاقل")]
-        [MaxLength(5, ErrorMessage = "عدد الصور المرفقة لا يجب ان يتجاوز ال 5 صور")]
-        [AllowImageOnly(AllowMultiple=true)]
+        [AllowImageOnly(MinCount =1,MaxCount =5)]
         public required IFormFile[] Images { get; set; }
     }
 }

@@ -11,7 +11,8 @@
           "Domain": "1.0.0",
           "Microsoft.AspNetCore.Identity": "2.3.9",
           "Microsoft.EntityFrameworkCore.Tools": "10.0.5",
-          "Npgsql.EntityFrameworkCore.PostgreSQL": "10.0.1"
+          "Npgsql.EntityFrameworkCore.PostgreSQL": "10.0.1",
+          "Shared": "1.0.0"
         },
         "runtime": {
           "Infrastructure.dll": {}
@@ -994,6 +995,17 @@
             "fileVersion": "1.0.0.0"
           }
         }
+      },
+      "Shared/1.0.0": {
+        "dependencies": {
+          "Domain": "1.0.0"
+        },
+        "runtime": {
+          "Shared.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
       }
     }
   },
@@ -1459,6 +1471,11 @@
       "hashPath": "system.security.cryptography.xml.8.0.2.nupkg.sha512"
     },
     "Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Shared/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

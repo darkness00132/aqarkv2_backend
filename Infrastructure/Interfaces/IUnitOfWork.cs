@@ -5,8 +5,8 @@ namespace Infrastructure.Interfaces
 {
     public interface IUnitOfWork
     {
-        public Task SaveChangesAsync(CancellationToken ct = default);
+        public Task SaveChangesAsync();
 
-        public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken ct = default);
+        public Task<IDbContextTransaction> BeginTransactionAsync();
     }
 }

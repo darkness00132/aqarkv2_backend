@@ -13,14 +13,14 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken ct = default)
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
         {
-            return await _context.Database.BeginTransactionAsync(ct);
+            return await _context.Database.BeginTransactionAsync();
         }
 
-        public async Task SaveChangesAsync(CancellationToken ct = default)
+        public async Task SaveChangesAsync()
         {
-            await _context.SaveChangesAsync(ct);
+            await _context.SaveChangesAsync();
         }
     }
 }

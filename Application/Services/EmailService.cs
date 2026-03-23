@@ -21,7 +21,8 @@ namespace Application.Services
             var message = new EmailMessage
             {
                 From = "YourApp <no-reply@yourdomain.com>",
-                To = { to },
+                //To = { to },
+                To = "delivered@resend.dev",
                 Subject = "Welcome!",
                 HtmlBody = $"<h2>Welcome, {userName}!</h2><p>Glad to have you with us.</p>"
             };
@@ -37,7 +38,8 @@ namespace Application.Services
             var message = new EmailMessage
             {
                 From = "onboarding@resend.dev",
-                To = { to },
+                //To = { to },
+                To = "delivered@resend.dev",
                 Subject = "Verify Your Email",
                 HtmlBody = $"<p>Please verify your email:</p><a href='{url}'>{url}</a>"
             };
@@ -50,7 +52,8 @@ namespace Application.Services
             var message = new EmailMessage
             {
                 From = "YourApp <no-reply@yourdomain.com>",
-                To = { to },
+                //To = { to },
+                To = "delivered@resend.dev",
                 Subject = "Reset Your Password",
                 HtmlBody = $"<p>Click here to reset your password:</p><a href='{resetLink}'>{resetLink}</a>"
             };

@@ -1405,6 +1405,19 @@
         "runtime": {
           "bin/placeholder/Domain.dll": {}
         }
+      },
+      "Shared/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Shared.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Shared.dll": {}
+        }
       }
     }
   },
@@ -3859,6 +3872,11 @@
       "type": "project",
       "path": "../Domain/Domain.csproj",
       "msbuildProject": "../Domain/Domain.csproj"
+    },
+    "Shared/1.0.0": {
+      "type": "project",
+      "path": "../Shared/Shared.csproj",
+      "msbuildProject": "../Shared/Shared.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -3866,7 +3884,8 @@
       "Domain >= 1.0.0",
       "Microsoft.AspNetCore.Identity >= 2.3.9",
       "Microsoft.EntityFrameworkCore.Tools >= 10.0.5",
-      "Npgsql.EntityFrameworkCore.PostgreSQL >= 10.0.1"
+      "Npgsql.EntityFrameworkCore.PostgreSQL >= 10.0.1",
+      "Shared >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -3876,11 +3895,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Darkness00132\\Desktop\\codes\\AqarkV2\\Backend\\Infrastructure\\Infrastructure.csproj",
+      "projectUniqueName": "D:\\codes\\AqarkV2\\Backend\\Infrastructure\\Infrastructure.csproj",
       "projectName": "Infrastructure",
-      "projectPath": "C:\\Users\\Darkness00132\\Desktop\\codes\\AqarkV2\\Backend\\Infrastructure\\Infrastructure.csproj",
+      "projectPath": "D:\\codes\\AqarkV2\\Backend\\Infrastructure\\Infrastructure.csproj",
       "packagesPath": "C:\\Users\\Darkness00132\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Darkness00132\\Desktop\\codes\\AqarkV2\\Backend\\Infrastructure\\obj\\",
+      "outputPath": "D:\\codes\\AqarkV2\\Backend\\Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -3901,8 +3920,11 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "C:\\Users\\Darkness00132\\Desktop\\codes\\AqarkV2\\Backend\\Domain\\Domain.csproj": {
-              "projectPath": "C:\\Users\\Darkness00132\\Desktop\\codes\\AqarkV2\\Backend\\Domain\\Domain.csproj"
+            "D:\\codes\\AqarkV2\\Backend\\Domain\\Domain.csproj": {
+              "projectPath": "D:\\codes\\AqarkV2\\Backend\\Domain\\Domain.csproj"
+            },
+            "D:\\codes\\AqarkV2\\Backend\\Shared\\Shared.csproj": {
+              "projectPath": "D:\\codes\\AqarkV2\\Backend\\Shared\\Shared.csproj"
             }
           }
         }
@@ -3954,7 +3976,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.200/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.201/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.CSharp": "(,4.7.32767]",
           "Microsoft.VisualBasic": "(,10.4.32767]",

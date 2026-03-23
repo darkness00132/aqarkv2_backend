@@ -1,7 +1,10 @@
 ﻿using Domain.Entities;
 using Infrastructure.Interfaces;
 using Infrastructure.Presistance;
+using Infrastructure.Presistance.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Shared.Filters;
+using Shared.Pagination;
 
 namespace Infrastructure.Repositories
 {
@@ -12,6 +15,13 @@ namespace Infrastructure.Repositories
         public AdRepo(AppDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<Ad?> GetByIdToMutateAsync(Guid id)
+        {
+            return await _context.Ads
+                .Include(a =>a.Images)
+                .FirstOrDefaultAsync(a=>a.Id == id);
         }
 
         public async Task<Ad?> GetAdBySlugAsync(string slug, CancellationToken ct = default)
@@ -28,24 +38,45 @@ namespace Infrastructure.Repositories
             return await _context.Ads
                 .AsNoTracking()
                 .Include(a=>a.Images)
-                .Include(a=>a.User)
                 .FirstOrDefaultAsync(a=>a.Id == id,ct);
         }
-        public async Task<List<Ad>> GetAllAsync(CancellationToken ct=default)
+        public async Task<List<Ad>> GetAllAsync(AdFilters? filters,Pagination?pagination ,CancellationToken ct=default)
         {
             return await _context.Ads
                 .AsNoTracking()
+                .ApplyFilters(filters)
                 .Include(p => p.Images.Take(1))
                 .Include(a => a.User)
+                .ApplyPagination(pagination)
                 .ToListAsync(ct);
         }
 
-        public async Task<Guid> CreateAdAsync(Ad ad,CancellationToken ct=default)
+        public async Task<List<Ad>> GetMineAsync(AdFilters? filters, Pagination? pagination , Guid userId, CancellationToken ct = default)
+        {
+            return await _context.Ads
+                  .AsNoTracking()
+                  .Where(a => a.UserId == userId)
+                  .ApplyFilters(filters)
+                  .Include(p => p.Images.Take(1))
+                  .Include(a => a.User)
+                  .ApplyPagination(pagination)
+                  .ToListAsync(ct);
+        }
+        public async Task<Guid> CreateAdAsync(Ad ad)
         {
             ad.Id = Guid.NewGuid();
-            ad.CreatedAt = DateTime.UtcNow;
-            await _context.Ads.AddAsync(ad,ct);
+            await _context.Ads.AddAsync(ad);
             return ad.Id;
+        }
+        
+        public void DeleteAd(Ad ad)
+        {
+            _context.Ads.Remove(ad);
+        }
+
+        public async Task<int> Count(CancellationToken ct = default)
+        {
+            return await _context.Ads.CountAsync();
         }
     }
 }

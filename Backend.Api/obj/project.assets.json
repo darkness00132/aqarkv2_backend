@@ -18,7 +18,7 @@
           }
         }
       },
-      "AWSSDK.Core/4.0.3.17": {
+      "AWSSDK.Core/4.0.3.19": {
         "type": "package",
         "compile": {
           "lib/net8.0/AWSSDK.Core.dll": {
@@ -31,10 +31,10 @@
           }
         }
       },
-      "AWSSDK.S3/4.0.19": {
+      "AWSSDK.S3/4.0.19.1": {
         "type": "package",
         "dependencies": {
-          "AWSSDK.Core": "[4.0.3.17, 5.0.0)"
+          "AWSSDK.Core": "[4.0.3.19, 5.0.0)"
         },
         "compile": {
           "lib/net8.0/AWSSDK.S3.dll": {
@@ -43,22 +43,6 @@
         },
         "runtime": {
           "lib/net8.0/AWSSDK.S3.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "CloudinaryDotNet/1.28.0": {
-        "type": "package",
-        "dependencies": {
-          "Newtonsoft.Json": "13.0.3"
-        },
-        "compile": {
-          "lib/netstandard2.0/CloudinaryDotNet.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/netstandard2.0/CloudinaryDotNet.dll": {
             "related": ".xml"
           }
         }
@@ -719,7 +703,7 @@
       "Newtonsoft.Json/13.0.3": {
         "type": "package",
         "compile": {
-          "lib/net6.0/Newtonsoft.Json.dll": {
+          "lib/net6.0/_._": {
             "related": ".xml"
           }
         },
@@ -1002,14 +986,14 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
         "dependencies": {
-          "AWSSDK.S3": "4.0.19",
+          "AWSSDK.S3": "4.0.19.1",
           "AutoMapper": "16.1.1",
-          "CloudinaryDotNet": "1.28.0",
           "Domain": "1.0.0",
           "Infrastructure": "1.0.0",
           "Microsoft.AspNetCore.Authentication.Google": "10.0.5",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "10.0.5",
           "Resend": "0.2.2",
+          "Shared": "1.0.0",
           "SixLabors.ImageSharp": "3.1.12",
           "System.IdentityModel.Tokens.Jwt": "8.16.0"
         },
@@ -1038,13 +1022,27 @@
         "framework": ".NETCoreApp,Version=v10.0",
         "dependencies": {
           "Domain": "1.0.0",
-          "Npgsql.EntityFrameworkCore.PostgreSQL": "10.0.1"
+          "Npgsql.EntityFrameworkCore.PostgreSQL": "10.0.1",
+          "Shared": "1.0.0"
         },
         "compile": {
           "bin/placeholder/Infrastructure.dll": {}
         },
         "runtime": {
           "bin/placeholder/Infrastructure.dll": {}
+        }
+      },
+      "Shared/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Shared.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Shared.dll": {}
         }
       }
     }
@@ -1074,15 +1072,15 @@
         "lib/netstandard2.0/AutoMapper.xml"
       ]
     },
-    "AWSSDK.Core/4.0.3.17": {
-      "sha512": "Ab24kVquQ8kvuQKNe5MK/SvaXR4uoxPkAlTPALDEImaHcwsBg+UWfRVcNzLEx4dRR2y1mDFFh+zZ9TVMXGY6Jg==",
+    "AWSSDK.Core/4.0.3.19": {
+      "sha512": "8zIzN59+J6arYSyFuhnSxPepr8ff4p6li+MxKUUnqCgwZqQ+icEGJK/23c1USIEALqZZ5gdiITuH2sOZWQom+Q==",
       "type": "package",
-      "path": "awssdk.core/4.0.3.17",
+      "path": "awssdk.core/4.0.3.19",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "awssdk.core.4.0.3.17.nupkg.sha512",
+        "awssdk.core.4.0.3.19.nupkg.sha512",
         "awssdk.core.nuspec",
         "images/AWSLogo.png",
         "lib/net472/AWSSDK.Core.dll",
@@ -1096,17 +1094,17 @@
         "tools/account-management.ps1"
       ]
     },
-    "AWSSDK.S3/4.0.19": {
-      "sha512": "4MuPk4oADJImViC6jeNNWCrwY5/BNtuoHG2vzb5nBRPAdS8GTFIkDpIUbg+w82pZL8TEG+pN8ARTBxoD26FOzg==",
+    "AWSSDK.S3/4.0.19.1": {
+      "sha512": "DCTFohRB53/g2kaz7cUX3ZTyFTbRErj5JvT4HrquKTvXvUpY/vUyUMGEVWoC0UXmxalYaPAR8tO7WgEJRJjM9w==",
       "type": "package",
-      "path": "awssdk.s3/4.0.19",
+      "path": "awssdk.s3/4.0.19.1",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "analyzers/dotnet/cs/AWSSDK.S3.CodeAnalysis.dll",
         "analyzers/dotnet/cs/SharedAnalysisCode.dll",
-        "awssdk.s3.4.0.19.nupkg.sha512",
+        "awssdk.s3.4.0.19.1.nupkg.sha512",
         "awssdk.s3.nuspec",
         "images/AWSLogo.png",
         "lib/net472/AWSSDK.S3.dll",
@@ -1119,25 +1117,6 @@
         "lib/netstandard2.0/AWSSDK.S3.xml",
         "tools/install.ps1",
         "tools/uninstall.ps1"
-      ]
-    },
-    "CloudinaryDotNet/1.28.0": {
-      "sha512": "o5Dfp5DrpF69s8qjlh4dxzXuJUCRxt7KQaweU8wMDxd1cPFONCVNZsgFQZ3v0PZDN76fLonZ5vFDjVTA3UTjCA==",
-      "type": "package",
-      "path": "cloudinarydotnet/1.28.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "CloudinaryIcon.png",
-        "README.md",
-        "cloudinarydotnet.1.28.0.nupkg.sha512",
-        "cloudinarydotnet.nuspec",
-        "lib/net452/CloudinaryDotNet.dll",
-        "lib/net452/CloudinaryDotNet.xml",
-        "lib/netstandard1.3/CloudinaryDotNet.dll",
-        "lib/netstandard1.3/CloudinaryDotNet.xml",
-        "lib/netstandard2.0/CloudinaryDotNet.dll",
-        "lib/netstandard2.0/CloudinaryDotNet.xml"
       ]
     },
     "Humanizer.Core/2.14.1": {
@@ -3271,6 +3250,11 @@
       "type": "project",
       "path": "../Infrastructure/Infrastructure.csproj",
       "msbuildProject": "../Infrastructure/Infrastructure.csproj"
+    },
+    "Shared/1.0.0": {
+      "type": "project",
+      "path": "../Shared/Shared.csproj",
+      "msbuildProject": "../Shared/Shared.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -3279,6 +3263,7 @@
       "Infrastructure >= 1.0.0",
       "Microsoft.AspNetCore.OpenApi >= 10.0.5",
       "Microsoft.EntityFrameworkCore.Design >= 10.0.5",
+      "Shared >= 1.0.0",
       "Swashbuckle.AspNetCore >= 10.1.5"
     ]
   },
@@ -3289,11 +3274,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Darkness00132\\Desktop\\codes\\AqarkV2\\Backend\\Backend.Api\\Backend.Api.csproj",
+      "projectUniqueName": "D:\\codes\\AqarkV2\\Backend\\Backend.Api\\Backend.Api.csproj",
       "projectName": "Backend.Api",
-      "projectPath": "C:\\Users\\Darkness00132\\Desktop\\codes\\AqarkV2\\Backend\\Backend.Api\\Backend.Api.csproj",
+      "projectPath": "D:\\codes\\AqarkV2\\Backend\\Backend.Api\\Backend.Api.csproj",
       "packagesPath": "C:\\Users\\Darkness00132\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Darkness00132\\Desktop\\codes\\AqarkV2\\Backend\\Backend.Api\\obj\\",
+      "outputPath": "D:\\codes\\AqarkV2\\Backend\\Backend.Api\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -3314,11 +3299,14 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "C:\\Users\\Darkness00132\\Desktop\\codes\\AqarkV2\\Backend\\Application\\Application.csproj": {
-              "projectPath": "C:\\Users\\Darkness00132\\Desktop\\codes\\AqarkV2\\Backend\\Application\\Application.csproj"
+            "D:\\codes\\AqarkV2\\Backend\\Application\\Application.csproj": {
+              "projectPath": "D:\\codes\\AqarkV2\\Backend\\Application\\Application.csproj"
             },
-            "C:\\Users\\Darkness00132\\Desktop\\codes\\AqarkV2\\Backend\\Infrastructure\\Infrastructure.csproj": {
-              "projectPath": "C:\\Users\\Darkness00132\\Desktop\\codes\\AqarkV2\\Backend\\Infrastructure\\Infrastructure.csproj"
+            "D:\\codes\\AqarkV2\\Backend\\Infrastructure\\Infrastructure.csproj": {
+              "projectPath": "D:\\codes\\AqarkV2\\Backend\\Infrastructure\\Infrastructure.csproj"
+            },
+            "D:\\codes\\AqarkV2\\Backend\\Shared\\Shared.csproj": {
+              "projectPath": "D:\\codes\\AqarkV2\\Backend\\Shared\\Shared.csproj"
             }
           }
         }
@@ -3373,7 +3361,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.200/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.201/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.AspNetCore": "(,10.0.32767]",
           "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

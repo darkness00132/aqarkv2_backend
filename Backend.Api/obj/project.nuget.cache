@@ -1,13 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "4dAYvvG6xCA=",
+  "dgSpecHash": "9wTJOQZPdmk=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Darkness00132\\Desktop\\codes\\AqarkV2\\Backend\\Backend.Api\\Backend.Api.csproj",
+  "projectFilePath": "D:\\codes\\AqarkV2\\Backend\\Backend.Api\\Backend.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Darkness00132\\.nuget\\packages\\automapper\\16.1.1\\automapper.16.1.1.nupkg.sha512",
-    "C:\\Users\\Darkness00132\\.nuget\\packages\\awssdk.core\\4.0.3.17\\awssdk.core.4.0.3.17.nupkg.sha512",
-    "C:\\Users\\Darkness00132\\.nuget\\packages\\awssdk.s3\\4.0.19\\awssdk.s3.4.0.19.nupkg.sha512",
-    "C:\\Users\\Darkness00132\\.nuget\\packages\\cloudinarydotnet\\1.28.0\\cloudinarydotnet.1.28.0.nupkg.sha512",
+    "C:\\Users\\Darkness00132\\.nuget\\packages\\awssdk.core\\4.0.3.19\\awssdk.core.4.0.3.19.nupkg.sha512",
+    "C:\\Users\\Darkness00132\\.nuget\\packages\\awssdk.s3\\4.0.19.1\\awssdk.s3.4.0.19.1.nupkg.sha512",
     "C:\\Users\\Darkness00132\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\Darkness00132\\.nuget\\packages\\microsoft.aspnetcore.authentication.google\\10.0.5\\microsoft.aspnetcore.authentication.google.10.0.5.nupkg.sha512",
     "C:\\Users\\Darkness00132\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\10.0.5\\microsoft.aspnetcore.authentication.jwtbearer.10.0.5.nupkg.sha512",

@@ -16,3 +16,5 @@ C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Infrastructure\obj\Release\
 C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Infrastructure\obj\Release\net10.0\Infrastructure.pdb
 C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Infrastructure\obj\Release\net10.0\Infrastructure.genruntimeconfig.cache
 C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Infrastructure\obj\Release\net10.0\ref\Infrastructure.dll
+C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Infrastructure\bin\Release\net10.0\Shared.dll
+C:\Users\Darkness00132\Desktop\codes\AqarkV2\Backend\Infrastructure\bin\Release\net10.0\Shared.pdb
