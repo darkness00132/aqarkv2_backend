@@ -4,7 +4,7 @@ namespace Application.DTOs.Ad
 {
     public class AdDTO
     {
-        public string Slug { get; set; } = string.Empty;
+        public string Slug { get; set; }
 
         public required string Description { get; set; }
 
@@ -24,7 +24,7 @@ namespace Application.DTOs.Ad
 
         public string? State { get; set; }
 
-        public required PublicUser User { get; set; }
+        public required BrokerItemList User { get; set; }
 
         public required string GovernorateName { get; set; }
 

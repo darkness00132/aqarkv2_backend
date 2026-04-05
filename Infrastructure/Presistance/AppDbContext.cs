@@ -27,6 +27,7 @@ namespace Infrastructure.Presistance
         public DbSet<BrokerProfile> BrokerProfiles { get; set; }
         public DbSet<BrokerReport> BrokerReports { get; set; }
         public DbSet<BrokerReview> BrokerReviews { get; set; }
+        public DbSet<BrokerVerificationRequest> BrokerVerificationRequests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -45,7 +46,7 @@ namespace Infrastructure.Presistance
                     .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<BrokerReview>()
-                    .HasOne(r => r.Broker)
+                    .HasOne(r => r.BrokerProfile)
                     .WithMany()
                     .HasForeignKey(r => r.BrokerUserId)
                     .OnDelete(DeleteBehavior.Restrict);
@@ -55,6 +56,18 @@ namespace Infrastructure.Presistance
                     .WithMany()
                     .HasForeignKey(r => r.UserId)
                     .OnDelete(DeleteBehavior.Restrict);
+
+                builder.Entity<CreditsLog>()
+                    .HasOne(c => c.Ad)
+                    .WithMany(a => a.CreditsLog)
+                    .HasForeignKey(c => c.AdId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                builder.Entity<BrokerReview>()
+                    .HasOne(r => r.BrokerProfile)
+                    .WithMany()
+                    .HasForeignKey(r => r.BrokerUserId)
+                    .HasPrincipalKey(b => b.UserId);
 
             builder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         }

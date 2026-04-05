@@ -10,13 +10,15 @@ namespace Application.Mapping
         {
             CreateMap<RegisterDTO, User>().ForMember(dest=>dest.UserName,opt=>opt.MapFrom(src=>src.Email));
 
-            CreateMap<UserDTO, User>().ReverseMap();
+            CreateMap<User, UserDTO>().ForMember(dest=>dest.Credits,opt=>opt.MapFrom(src=>src.BrokerProfile.Credits));
 
-            CreateMap<PublicUser, User>().ReverseMap();
+            CreateMap<User, Broker>()
+                .ForMember(dest => dest.Slug, opt => opt.MapFrom(src => src.BrokerProfile.Slug))
+                .ForMember(dest=>dest.WhatsAppNumber, opt=>opt.MapFrom(src=>src.BrokerProfile.WhatsAppNumber))
+                .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.BrokerProfile.Phone));
 
-            CreateMap<Broker, User>().ReverseMap();
-
-            CreateMap<BrokerItemList, User>().ReverseMap();
+            CreateMap<User, BrokerItemList>()
+                .ForMember(dest => dest.Slug, opt => opt.MapFrom(src => src.BrokerProfile.Slug));
         }
     }
 }

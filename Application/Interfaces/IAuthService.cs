@@ -16,7 +16,7 @@ namespace Application.Interfaces
 
         Task<LoginResponse> LoginAsync(LoginDTO userDTO, string ip);
 
-        Task<string> ForgetPassword(string email);
+        Task ForgetPassword(string email);
 
         Task ResetPassword(ResetPasswordDTO resetPasswordDTO);
 

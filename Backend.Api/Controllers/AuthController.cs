@@ -104,8 +104,8 @@ namespace Backend.Api.Controllers
         [HttpPost("forgotPassword")]
         public async Task<IActionResult> ForgetPassword([FromBody]string email)
         {
-            string token = await _authService.ForgetPassword(email);
-            return Ok(new { forgetPasswordToken=token });
+            await _authService.ForgetPassword(email);
+            return Ok();
         }
 
         [HttpPost("resetPassword")]

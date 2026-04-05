@@ -25,7 +25,7 @@ public class RequiredIfHasState : ValidationAttribute
         var dto = ctx.ObjectInstance as CreateAdDTO;
         if (dto == null) return ValidationResult.Success;
 
-        if (_withState.Contains(dto.PropertyType) && (value == null || (int)value == 0))
+        if (_withState.Contains(dto.PropertyType) && value == null)
             return new ValidationResult("حالة العقار مطلوب لهذا النوع من العقارات");
 
         return ValidationResult.Success;

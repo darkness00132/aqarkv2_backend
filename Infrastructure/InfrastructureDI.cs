@@ -1,8 +1,12 @@
 ﻿using Domain.Entities.UsersEnities;
 using Domain.Enums;
 using Infrastructure.Interfaces;
+using Infrastructure.Interfaces.Ads;
+using Infrastructure.Interfaces.Brokers;
 using Infrastructure.Presistance;
 using Infrastructure.Repositories;
+using Infrastructure.Repositories.Ads;
+using Infrastructure.Repositories.Brokers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -46,12 +50,20 @@ namespace Infrastructure
             // Register repositories
             service.AddScoped<IRefreshTokenRepo, RefreshTokenRepo>();
             service.AddScoped<IUnitOfWork, UnitOfWork>();
+
             service.AddScoped<IImageRepo, ImageRepo>();
             service.AddScoped<IAdRepo, AdRepo>();
             service.AddScoped<IAdLogRepo, AdLogRepo>();
+
             service.AddScoped<ICreditsLogRepo, CreditsLogRepo>();
             service.AddScoped<ICreditsRepo, CreditsRepo>();
-            service.AddScoped<IBrokerRepo, BrokerRepo>();
+
+            service.AddScoped<IBrokerProfileRepo, BrokerProfileRepo>();
+            service.AddScoped<IBrokerReviewRepo, BrokerReviewRepo>();
+            service.AddScoped<IBrokerReportRepo, BrokerReportRepo>();
+            service.AddScoped<IBrokerVerificationRequestRepo, BrokerVerificationRequestRepo>();
+
+            service.AddScoped<IUserRepo, UserRepo>();
 
             return service;
         }

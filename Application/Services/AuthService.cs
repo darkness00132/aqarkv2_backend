@@ -2,10 +2,15 @@
 using Application.DTOs.User;
 using Application.Exceptions;
 using Application.Interfaces;
+using Application.Interfaces.ThirdPartyService;
 using Application.Validators;
 using AutoMapper;
+using Domain.Entities;
+using Domain.Entities.Brokers;
 using Domain.Entities.UsersEnities;
+using Domain.Enums;
 using Infrastructure.Interfaces;
+using Infrastructure.Interfaces.Brokers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
@@ -20,6 +25,8 @@ namespace Application.Services
     public class AuthService : IAuthService
     {
         private readonly UserManager<User> _userManager;
+        private readonly ICreditsLogRepo _creditsLogRepo;
+        private readonly IBrokerProfileRepo _brokerProfileRepo;
         private readonly ITokenService _tokenService;
         private readonly IEmailService _emailService;
         private readonly IMapper _mapper;
@@ -27,11 +34,11 @@ namespace Application.Services
         private readonly IUnitOfWork _uow;
         private readonly IConfiguration _config;
 
-        public AuthService(
-            UserManager<User> userManager,
-            ITokenService tokenService, IEmailService emailService, IMapper mapper, IRefreshTokenRepo refreshTokenRepo, IUnitOfWork uow, IConfiguration config)
+        public AuthService(UserManager<User> userManager, ICreditsLogRepo creditsLogRepo, IBrokerProfileRepo brokerProfileRepo, ITokenService tokenService, IEmailService emailService, IMapper mapper, IRefreshTokenRepo refreshTokenRepo, IUnitOfWork uow, IConfiguration config)
         {
             _userManager = userManager;
+            _creditsLogRepo = creditsLogRepo;
+            _brokerProfileRepo = brokerProfileRepo;
             _tokenService = tokenService;
             _emailService = emailService;
             _mapper = mapper;
@@ -61,7 +68,48 @@ namespace Application.Services
             if (!result.Succeeded) throw ApiException.BadRequest("تعذر تأكيد البريد الإلكتروني. قد يكون الرابط منتهيًا أو غير صالح.");
         }
 
-        public async Task<string> ForgetPassword(string email)
+        public async Task HandleCompleteProfileAsync(CompleteProfileDTO dto, string? userId)
+        {
+            if (string.IsNullOrEmpty(userId)) throw ApiException.Unauthorized();
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user is null) throw ApiException.NotFound("هذا حساب غير موجود");
+
+            await using var transaction = await _uow.BeginTransactionAsync();
+
+            user.IsProfileCompleted = true;
+            user.PhoneNumber = dto.PhoneNumber;
+
+            if (dto.Role == PublicRoles.Broker)
+            {
+                await _brokerProfileRepo.CreateBrokerProfileAsync(new BrokerProfile
+                {
+                    UserId = user.Id,
+                    Slug = GenerateSlug(user.Name),
+                    Credits = 100
+                });
+                await _creditsLogRepo.LogAsync(new CreditsLog
+                {
+                    UserId = user.Id,
+                    Credits = 100,
+                    Action = CreditsLogAction.Gift,
+                    Description = "create account gift"
+                });
+            }
+
+            var updateResult = await _userManager.UpdateAsync(user);
+            if (!updateResult.Succeeded)
+                throw ApiException.Conflict(string.Join(" | ", updateResult.Errors.Select(e => e.Description)));
+
+            var roleResult = await _userManager.AddToRoleAsync(user, dto.Role.ToString());
+            if (!roleResult.Succeeded)
+                throw ApiException.Conflict(string.Join(" | ", roleResult.Errors.Select(e => e.Description)));
+
+            await _uow.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+
+        public async Task ForgetPassword(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
             if (user is null) throw ApiException.NotFound("لا يوجد حساب بهذا البريد الإلكتروني.");
@@ -76,12 +124,12 @@ namespace Application.Services
 
             string url = $"{FrontendUrl}/resetPassword?email={Uri.EscapeDataString(email)}&token={encodedToken}";
 
-            return url;
+            await _emailService.SendPasswordResetEmailAsync(email, url);
         }
 
         public async Task<GoogleCallbackResult> HandleGoogleCallbackAsync(AuthenticateResult googleResult)
         {
-            string frontendUrl = _config.GetValue<string>("frontendUrl")!;
+            string frontendUrl = _config.GetValue<string>("FrontendUrl")!;
 
             if (!googleResult.Succeeded)
             {
@@ -111,9 +159,8 @@ namespace Application.Services
                     UserName = email,
                     Email = email,
                     IsProfileCompleted = false,
-                    Slug = GenerateSlug(name),
-                    EmailConfirmed=true,
-                    ProfilePhoto= profilePhoto
+                    EmailConfirmed = true,
+                    ProfilePhoto = profilePhoto,
                 };
 
                 var createResult = await _userManager.CreateAsync(user);
@@ -121,8 +168,13 @@ namespace Application.Services
                     return GoogleCallbackResult.Failed(
               $"{frontendUrl}/login?error={Encode("حدث خطأ أثناء إنشاء حسابك، يرجى المحاولة مرة أخرى.")}");
             }
+            else if (user.IsBlocked)
+            {
+                return GoogleCallbackResult.Failed(
+                    $"{frontendUrl}/login?error={Encode("هذا الحساب محظور.")}");
+            }
 
-            string refreshToken = await GenerateRefreshToken(user, ip:"Unknown");
+            string refreshToken = await GenerateRefreshToken(user, ip: "Unknown");
 
             await _uow.SaveChangesAsync();
 
@@ -133,7 +185,7 @@ namespace Application.Services
                 refreshToken,
                 DateTime.UtcNow.AddDays(ExpiresAt),
                 user.IsProfileCompleted ?
-                    $"{frontendUrl}/":
+                    $"{frontendUrl}/" :
                     $"{frontendUrl}/auth/completeProfile"
             );
         }
@@ -143,6 +195,7 @@ namespace Application.Services
             User? user = await _userManager.FindByEmailAsync(userDTO.Email);
 
             if (user is null) throw ApiException.Unauthorized("بيانات الدخول غير صحيحة.");
+            if (user.IsBlocked) throw ApiException.Forbidden("هذا الحساب محظور.");
             if (!user.EmailConfirmed) throw ApiException.Forbidden("لم يتم تأكيد البريد الإلكتروني بعد. برجاء مراجعة بريدك وتأكيد الحساب.");
 
             bool passwordValid = await _userManager.CheckPasswordAsync(user, userDTO.Password);
@@ -188,27 +241,50 @@ namespace Application.Services
             return new LoginResponse { RefreshToken = newRefreshToken, AccessToken = access };
         }
 
-        public async Task RegisterAsync(RegisterDTO userDTO)
+        public async Task RegisterAsync(RegisterDTO dto)
         {
             await using var tx = await _uow.BeginTransactionAsync();
 
-            var user = _mapper.Map<User>(userDTO);
-            user.Slug = GenerateSlug(user.Name);
+            var user = _mapper.Map<User>(dto);
 
-            var result = await _userManager.CreateAsync(user, userDTO.Password);
+            var result = await _userManager.CreateAsync(user, dto.Password);
             if (!result.Succeeded)
-                throw ApiException.Conflict(string.Join(" | ", result.Errors.Select(e => e.Description)));
+            {
+                bool isDuplicateEmail = result.Errors.Any(e => e.Code == "DuplicateEmail" || e.Code == "DuplicateUserName");
+                if (isDuplicateEmail)
+                    throw ApiException.Conflict("هذا البريد الإلكتروني مسجل بالفعل، يرجى تسجيل الدخول أو استخدام بريد إلكتروني آخر.");
 
-            var roleResult = await _userManager.AddToRoleAsync(user, userDTO.Role.ToString());
+                throw ApiException.Conflict(string.Join(" | ", result.Errors.Select(e => e.Description)));
+            }
+
+            var roleResult = await _userManager.AddToRoleAsync(user, dto.Role.ToString());
             if (!roleResult.Succeeded)
                 throw ApiException.Conflict(string.Join(" | ", roleResult.Errors.Select(e => e.Description)));
+
+            if (dto.Role == PublicRoles.Broker)
+            {
+                await _brokerProfileRepo.CreateBrokerProfileAsync(new BrokerProfile
+                {
+                    UserId = user.Id,
+                    Slug = GenerateSlug(user.Name),
+                    Credits = 100
+                });
+                await _creditsLogRepo.LogAsync(new CreditsLog
+                {
+                    UserId = user.Id,
+                    Credits = 100,
+                    Action = CreditsLogAction.Gift,
+                    Description = "create account gift"
+                });
+            }
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
-            await _emailService.SendValidationEmailAsync(user.Email!, encodedToken, user.Id);
-
+            await _uow.SaveChangesAsync();
             await tx.CommitAsync();
+
+            await _emailService.SendValidationEmailAsync(user.Email!, encodedToken, user.Id);
         }
 
         public async Task ResetPassword(ResetPasswordDTO resetPasswordDTO)
@@ -295,26 +371,7 @@ namespace Application.Services
             return rawRefresh;
         }
 
-        public async Task HandleCompleteProfileAsync(CompleteProfileDTO userDTO, string? userId)
-        {
-            if (userId is null) throw ApiException.Unauthorized();
-
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user is null) throw ApiException.NotFound("هذا حساب غير موجود");
-
-            user.IsProfileCompleted = true;
-            user.PhoneNumber = userDTO.PhoneNumber;
-
-            var updateResult = await _userManager.UpdateAsync(user);
-            if (!updateResult.Succeeded)
-                throw ApiException.Conflict(string.Join(" | ", updateResult.Errors.Select(e => e.Description)));
-
-            var roleResult = await _userManager.AddToRoleAsync(user, userDTO.Role.ToString());
-            if (!roleResult.Succeeded)
-                throw ApiException.Conflict(string.Join(" | ", roleResult.Errors.Select(e => e.Description)));
-        }
-
-        private string GenerateSlug(string name) 
+        private string GenerateSlug(string name)
         {
             string slug = name ?? "user";
 

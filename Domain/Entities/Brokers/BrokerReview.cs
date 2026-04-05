@@ -7,10 +7,10 @@ namespace Domain.Entities.Brokers
     [Index(nameof(BrokerUserId), nameof(UserId), IsUnique = true)]
     public class BrokerReview
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         public Guid BrokerUserId { get; set; }
-        public User Broker { get; set; }
+        public BrokerProfile BrokerProfile { get; set; }
 
         public Guid UserId { get; set; }
         public User User { get; set; }

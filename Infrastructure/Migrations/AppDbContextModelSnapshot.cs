@@ -29,6 +29,7 @@ namespace Infrastructure.Migrations
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "property_type", new[] { "apartment", "building", "chalet", "commercial_shop", "compound", "farm", "garage", "hotel", "house", "land", "medical_clinic", "office", "studio", "villa", "warehouse" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "report_reason", new[] { "fake_listing", "fraud", "harassment", "other" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "report_status", new[] { "dismissed", "pending", "resolved", "under_review" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "verification_status", new[] { "approved", "pending", "rejected" });
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Domain.Entities.AdEntities.Ad", b =>
@@ -157,6 +158,9 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("text");
 
+                    b.Property<double>("AverageRating")
+                        .HasColumnType("double precision");
+
                     b.Property<string>("Bio")
                         .HasColumnType("text");
 
@@ -165,6 +169,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Credits")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("IsFeatured")
                         .HasColumnType("boolean");
@@ -179,6 +186,12 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Phone")
+                        .HasColumnType("text");
+
+                    b.Property<int>("ReviewCount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Slug")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -186,15 +199,14 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("WhatsAppNumber")
-                        .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int?>("YearsOfExperience")
-                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("Slug");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("BrokerProfiles");
                 });
@@ -274,6 +286,50 @@ namespace Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("BrokerReviews");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Brokers.BrokerVerificationRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset?>("LicenseExpiryDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LicenseImageUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LicenseNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("RejectionReason")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("ReviewedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("ReviewedByAdminId")
+                        .HasColumnType("uuid");
+
+                    b.Property<VerificationStatus>("Status")
+                        .HasColumnType("verification_status");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReviewedByAdminId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("BrokerVerificationRequests");
                 });
 
             modelBuilder.Entity("Domain.Entities.CreditsLog", b =>
@@ -564,9 +620,6 @@ namespace Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Credits")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
@@ -611,9 +664,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Slug")
                         .HasColumnType("text");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -820,8 +870,8 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Brokers.BrokerProfile", b =>
                 {
                     b.HasOne("Domain.Entities.UsersEnities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                        .WithOne("BrokerProfile")
+                        .HasForeignKey("Domain.Entities.Brokers.BrokerProfile", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -874,11 +924,29 @@ namespace Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Brokers.BrokerVerificationRequest", b =>
+                {
+                    b.HasOne("Domain.Entities.UsersEnities.User", "ReviewedByAdmin")
+                        .WithMany()
+                        .HasForeignKey("ReviewedByAdminId");
+
+                    b.HasOne("Domain.Entities.UsersEnities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ReviewedByAdmin");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Domain.Entities.CreditsLog", b =>
                 {
                     b.HasOne("Domain.Entities.AdEntities.Ad", "Ad")
-                        .WithMany()
-                        .HasForeignKey("AdId");
+                        .WithMany("CreditsLog")
+                        .HasForeignKey("AdId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Domain.Entities.Transaction", "Transaction")
                         .WithMany()
@@ -1032,6 +1100,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.AdEntities.Ad", b =>
                 {
+                    b.Navigation("CreditsLog");
+
                     b.Navigation("Images");
 
                     b.Navigation("Logs");
@@ -1044,6 +1114,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.UsersEnities.User", b =>
                 {
+                    b.Navigation("BrokerProfile");
+
                     b.Navigation("RefreshTokens");
 
                     b.Navigation("Reports");

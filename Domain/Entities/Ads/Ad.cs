@@ -48,6 +48,8 @@ namespace Domain.Entities.AdEntities
 
         public ICollection<AdLog> Logs { get; set; } = new List<AdLog>();
 
+        public ICollection<CreditsLog> CreditsLog { get; set; } = new List<CreditsLog>();
+
         public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
     }
 }

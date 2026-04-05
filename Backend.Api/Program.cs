@@ -7,6 +7,7 @@ using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers();
 builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
@@ -17,22 +18,24 @@ builder.Services.AddRateLimiter(options =>
             partitionKey: ctx.User.Identity?.Name ?? ctx.Connection.RemoteIpAddress?.ToString() ?? "anon",
             factory: _ => new SlidingWindowRateLimiterOptions
             {
-                PermitLimit = 100,
+                PermitLimit = 150,
                 Window = TimeSpan.FromMinutes(1),
                 SegmentsPerWindow = 6,  // checks every 10 seconds
                 AutoReplenishment = true,
                 QueueLimit = 0
             }));
 
-    // Strict policy for Auth endpoints
-    options.AddSlidingWindowLimiter("Auth", opt =>
-    {
-        opt.PermitLimit = 5;
-        opt.Window = TimeSpan.FromMinutes(1);
-        opt.SegmentsPerWindow = 3;
-        opt.AutoReplenishment = true;
-        opt.QueueLimit = 0;
-    });
+    options.AddPolicy("Auth", ctx =>
+        RateLimitPartition.GetSlidingWindowLimiter(
+            partitionKey: $"{ctx.Connection.RemoteIpAddress}_{ctx.Request.Path}",
+            factory: _ => new SlidingWindowRateLimiterOptions
+            {
+                PermitLimit = 10,
+                Window = TimeSpan.FromMinutes(5),
+                SegmentsPerWindow = 5,
+                AutoReplenishment = true,
+                QueueLimit = 0
+            }));
 
     options.OnRejected = async (ctx, token) =>
     {
@@ -44,8 +47,6 @@ builder.Services.AddRateLimiter(options =>
         );
     };
 });
-
-builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

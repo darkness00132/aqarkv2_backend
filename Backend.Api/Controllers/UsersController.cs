@@ -1,8 +1,7 @@
-﻿using Application.Exceptions;
-using Domain.Entities.UsersEnities;
+﻿using Application.DTOs.User;
+using Application.Exceptions;
+using Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -12,15 +11,16 @@ namespace Backend.Api.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly UserManager<User> _userManager;
-        public UsersController(UserManager<User> userManager)
+        private readonly IUserService _userService;
+
+        public UsersController(IUserService userService)
         {
-            _userManager = userManager;
+            _userService = userService;
         }
 
         [Authorize]
         [HttpGet("me")]
-        public async Task<IActionResult> Me() 
+        public async Task<ActionResult<UserDTO>> Me() 
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -29,8 +29,7 @@ namespace Backend.Api.Controllers
                 throw ApiException.Unauthorized();
             }
 
-            var user = await _userManager.FindByIdAsync(userId);
-            return Ok(user);
+            return await _userService.GetMe(userId);
         }
     }
 }

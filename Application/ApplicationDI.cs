@@ -1,8 +1,10 @@
 ﻿using Amazon.S3;
 using Application.Constants;
 using Application.Interfaces;
+using Application.Interfaces.ThirdPartyService;
 using Application.Options;
 using Application.Services;
+using Application.Services.ThirdPartyService;
 using Domain.Enums;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -34,7 +36,7 @@ namespace Application
             })
             .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
             {
-                var jwtOptions = config.GetSection("Jwt").Get<JwtOptions>();
+                var jwtOptions = config.GetSection("Jwt").Get<JwtSettings>();
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
@@ -87,13 +89,15 @@ namespace Application
             });
 
             //add customed services
-            service.AddScoped<ITokenService, TokenService>();
+            service.AddScoped<ITokenService, JwtTokenService>();
             service.AddScoped<IAuthService, AuthService>();
-            service.AddTransient<IEmailService, EmailService>();
-            service.AddScoped<IStorageService, S3StorageService>();
+            service.AddTransient<IEmailService, ResendEmailService>();
+            service.AddScoped<IImageService, S3ImageService>();
             service.AddScoped<IAdService, AdService>();
             service.AddSingleton<LocationService>();
             service.AddScoped<IBrokerService, BrokerService>();
+            service.AddScoped<IUserService, UserService>();
+            service.AddScoped<IReviewService, ReviewService>();
 
             return service;
         }

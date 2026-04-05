@@ -26,7 +26,7 @@ namespace Application.DTOs.Ad.Private
 
         public required string CityName { get; set; }
 
-        public required PublicUser User { get; set; }
+        public required BrokerItemList User { get; set; }
 
         public required DateTimeOffset CreatedAt { get; set; }
 

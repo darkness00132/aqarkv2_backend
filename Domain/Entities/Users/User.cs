@@ -5,13 +5,10 @@ namespace Domain.Entities.UsersEnities
 {
     public class User : IdentityUser<Guid>
     {
-        public string? Slug { get; set; }
-
+        
         public required string Name { get; set; }
 
         public string? ProfilePhoto { get; set; }
-
-        public int Credits { get; set; } = 0;
 
         public bool IsProfileCompleted { get; set; } = false;
 
@@ -24,5 +21,7 @@ namespace Domain.Entities.UsersEnities
         public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
         public ICollection<BrokerReview> Reviews { get; set; } = new List<BrokerReview>();
         public ICollection<BrokerReport> Reports { get; set; } = new List<BrokerReport>();
+
+        public BrokerProfile? BrokerProfile { get; set; }
     }
 }

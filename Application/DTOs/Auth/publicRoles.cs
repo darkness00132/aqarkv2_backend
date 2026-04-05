@@ -1,12 +1,9 @@
-﻿    using System;
-    using System.Collections.Generic;
-    using System.Text;
-
+﻿
     namespace Application.DTOs.Auth
     {
-        public enum publicRoles
+        public enum PublicRoles
         {
-            User = 1,
-            Broker = 2
+            User,
+            Broker
         }
     }

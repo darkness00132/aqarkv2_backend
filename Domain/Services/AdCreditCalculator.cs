@@ -95,127 +95,127 @@ namespace Domain.Services
                 PropertyType.Apartment or
                 PropertyType.Studio => adType switch
                 {
-                    AdType.RentMonthly => 85,
-                    AdType.RentYearly => 83,
-                    AdType.RentSeasonal => 95,
-                    AdType.SaleCash => 106,
-                    AdType.SaleInstallment => 114,
-                    _ => 85
+                    AdType.RentMonthly => 95,
+                    AdType.RentYearly => 95,
+                    AdType.RentSeasonal => 106,
+                    AdType.SaleCash => 118,
+                    AdType.SaleInstallment => 127,
+                    _ => 95
                 },
 
                 PropertyType.House or
                 PropertyType.Chalet => adType switch
                 {
-                    AdType.RentMonthly => 89,
-                    AdType.RentYearly => 87,
-                    AdType.RentSeasonal => 99,
-                    AdType.SaleCash => 111,
-                    AdType.SaleInstallment => 119,
-                    _ => 89
+                    AdType.RentMonthly => 99,
+                    AdType.RentYearly => 97,
+                    AdType.RentSeasonal => 110,
+                    AdType.SaleCash => 123,
+                    AdType.SaleInstallment => 132,
+                    _ => 99
                 },
 
                 PropertyType.Villa => adType switch
                 {
-                    AdType.RentMonthly => 100,
-                    AdType.RentYearly => 98,
-                    AdType.RentSeasonal => 111,
-                    AdType.SaleCash => 132,
-                    AdType.SaleInstallment => 141,
-                    _ => 100
+                    AdType.RentMonthly => 111,
+                    AdType.RentYearly => 109,
+                    AdType.RentSeasonal => 123,
+                    AdType.SaleCash => 146,
+                    AdType.SaleInstallment => 156,
+                    _ => 111
                 },
 
                 PropertyType.Compound => adType switch
                 {
-                    AdType.RentMonthly => 104,
-                    AdType.RentYearly => 102,
-                    AdType.RentSeasonal => 115,
-                    AdType.SaleCash => 137,
-                    AdType.SaleInstallment => 146,
-                    _ => 104
+                    AdType.RentMonthly => 115,
+                    AdType.RentYearly => 113,
+                    AdType.RentSeasonal => 127,
+                    AdType.SaleCash => 151,
+                    AdType.SaleInstallment => 161,
+                    _ => 115
                 },
 
                 PropertyType.CommercialShop or
                 PropertyType.Office => adType switch
                 {
-                    AdType.RentMonthly => 109,
-                    AdType.RentYearly => 106,
-                    AdType.RentSeasonal => 119,
-                    AdType.SaleCash => 142,
-                    AdType.SaleInstallment => 151,
-                    _ => 109
+                    AdType.RentMonthly => 120,
+                    AdType.RentYearly => 117,
+                    AdType.RentSeasonal => 131,
+                    AdType.SaleCash => 157,
+                    AdType.SaleInstallment => 167,
+                    _ => 120
                 },
 
                 PropertyType.MedicalClinic => adType switch
                 {
-                    AdType.RentMonthly => 121,
-                    AdType.RentYearly => 118,
-                    AdType.RentSeasonal => 132,
-                    AdType.SaleCash => 158,
-                    AdType.SaleInstallment => 168,
-                    _ => 121
+                    AdType.RentMonthly => 133,
+                    AdType.RentYearly => 130,
+                    AdType.RentSeasonal => 145,
+                    AdType.SaleCash => 174,
+                    AdType.SaleInstallment => 185,
+                    _ => 133
                 },
 
                 PropertyType.Hotel => adType switch
                 {
-                    AdType.RentMonthly => 132,
-                    AdType.RentYearly => 129,
-                    AdType.RentSeasonal => 145,
-                    AdType.SaleCash => 176,
-                    AdType.SaleInstallment => 187,
-                    _ => 132
+                    AdType.RentMonthly => 145,
+                    AdType.RentYearly => 142,
+                    AdType.RentSeasonal => 159,
+                    AdType.SaleCash => 193,
+                    AdType.SaleInstallment => 205,
+                    _ => 145
                 },
 
                 PropertyType.Building => adType switch
                 {
-                    AdType.RentMonthly => 124,
-                    AdType.RentYearly => 121,
-                    AdType.RentSeasonal => 135,
-                    AdType.SaleCash => 166,
-                    AdType.SaleInstallment => 176,
-                    _ => 124
+                    AdType.RentMonthly => 136,
+                    AdType.RentYearly => 133,
+                    AdType.RentSeasonal => 148,
+                    AdType.SaleCash => 182,
+                    AdType.SaleInstallment => 193,
+                    _ => 136
                 },
 
                 PropertyType.Farm => adType switch
                 {
-                    AdType.RentMonthly => 95,
-                    AdType.RentYearly => 93,
-                    AdType.RentSeasonal => 106,
-                    AdType.SaleCash => 126,
-                    AdType.SaleInstallment => 135,
-                    _ => 95
+                    AdType.RentMonthly => 106,
+                    AdType.RentYearly => 104,
+                    AdType.RentSeasonal => 118,
+                    AdType.SaleCash => 140,
+                    AdType.SaleInstallment => 150,
+                    _ => 106
                 },
 
                 PropertyType.Land => adType switch
                 {
-                    AdType.RentMonthly => 91,
-                    AdType.RentYearly => 89,
-                    AdType.RentSeasonal => 101,
-                    AdType.SaleCash => 145,
-                    AdType.SaleInstallment => 155,
-                    _ => 91
+                    AdType.RentMonthly => 102,
+                    AdType.RentYearly => 100,
+                    AdType.RentSeasonal => 113,
+                    AdType.SaleCash => 160,
+                    AdType.SaleInstallment => 171,
+                    _ => 102
                 },
 
                 PropertyType.Warehouse => adType switch
                 {
-                    AdType.RentMonthly => 93,
-                    AdType.RentYearly => 91,
-                    AdType.RentSeasonal => 103,
-                    AdType.SaleCash => 122,
-                    AdType.SaleInstallment => 131,
-                    _ => 93
+                    AdType.RentMonthly => 104,
+                    AdType.RentYearly => 102,
+                    AdType.RentSeasonal => 115,
+                    AdType.SaleCash => 136,
+                    AdType.SaleInstallment => 146,
+                    _ => 104
                 },
 
                 PropertyType.Garage => adType switch
                 {
-                    AdType.RentMonthly => 85,
-                    AdType.RentYearly => 83,
-                    AdType.RentSeasonal => 93,
-                    AdType.SaleCash => 103,
-                    AdType.SaleInstallment => 110,
-                    _ => 85
+                    AdType.RentMonthly => 95,
+                    AdType.RentYearly => 95,
+                    AdType.RentSeasonal => 104,
+                    AdType.SaleCash => 115,
+                    AdType.SaleInstallment => 123,
+                    _ => 95
                 },
 
-                _ => adType.IsSale() ? 106 : 85
+                _ => adType.IsSale() ? 118 : 95
             };
         }
     }

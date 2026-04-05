@@ -10,6 +10,6 @@ namespace Application.DTOs.Auth
         public required string PhoneNumber{ get; set; }
 
         [Required(ErrorMessage = "دور مستخدم مطلوب")]
-        public required publicRoles Role { get; set; }
+        public required PublicRoles Role { get; set; }
     }
 }

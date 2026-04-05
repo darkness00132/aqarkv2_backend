@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Interfaces;
 using Infrastructure.Presistance;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
@@ -14,10 +15,13 @@ namespace Infrastructure.Repositories
 
         public async Task<bool> DeductAsync(Guid userId, int cost, CancellationToken ct=default)
         {
-            var user = await _context.Users.FindAsync([userId],ct);
+            var user = await _context.Users
+                    .Include(u => u.BrokerProfile)
+                    .FirstOrDefaultAsync(u => u.Id == userId, ct);
             if (user is null) return false;
-            if (user.Credits < cost) return false;
-            user.Credits -= cost;
+            if (user.BrokerProfile is null) return false;
+            if (user.BrokerProfile.Credits < cost) return false;
+            user.BrokerProfile.Credits -= cost;
             return true;
         }
     }
