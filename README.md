@@ -107,7 +107,7 @@ This enables:
 ## 🧪 Run
 
 ```bash id="run-steps"
-git clone [https://github.com/your-username/aqark.git](https://github.com/Darkness00132/AqarkV2_Backend/tree/master)
+git clone https://github.com/Darkness00132/AqarkV2_Backend/tree/master
 cd aqark
 dotnet restore
 dotnet run
