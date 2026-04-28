@@ -1,6 +1,6 @@
 using Application;
 using Backend.Api.Middleware;
-using Infrastructure;
+using Infrastructure.DI;
 using Microsoft.AspNetCore.RateLimiting;
 using System.Text.Json;
 using System.Threading.RateLimiting;

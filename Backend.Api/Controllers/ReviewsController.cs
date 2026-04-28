@@ -1,6 +1,10 @@
-﻿using Application.DTOs.Reviews;
+﻿using Application.Constants;
+using Application.DTOs.Reviews;
+using Application.Exceptions;
 using Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Backend.Api.Controllers
 {
@@ -8,41 +12,48 @@ namespace Backend.Api.Controllers
     [ApiController]
     public class ReviewsController : ControllerBase
     {
-        private readonly ReviewService _reviewService;
+        private readonly BrokerReviewService _reviewService;
 
-        public ReviewsController(ReviewService reviewService)
+        public ReviewsController(BrokerReviewService reviewService)
         {
             _reviewService = reviewService;
         }
 
-        [HttpGet("all")]
-        public async Task<IActionResult> GetReviewsByBrokerSlug(string slug)
+        [HttpGet("all/{slug}")]
+        public async Task<ActionResult<List<Review>>> GetReviewsByBrokerSlug(string slug)
         {
-            var reviews = await _reviewService.GetReviewsByBrokerSlug(slug);
+            var reviews = await _reviewService.GetReviewsByBrokerSlugAsync(slug);
             return Ok(reviews);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetReviewById(int id)
+        public async Task<ActionResult<Review>> GetReviewById(int id)
         {
             var review = await _reviewService.GetReviewByIdAsync(id);
             return Ok(review);
         }
 
         [HttpGet("broker/{slug}")]
-        public async Task<IActionResult> GetReviewsByBrokerSlug2(string slug)
+        public async Task<ActionResult<List<Review>>> GetAllReviewsOfBroker(string slug)
         {
-            var reviews = await _reviewService.GetReviewsByBrokerSlug(slug);
+            var reviews = await _reviewService.GetReviewsByBrokerSlugAsync(slug);
             return Ok(reviews);
         }
 
-        [HttpPost("create")]
-        public async Task<IActionResult> CreateReview(CreateReview dto)
+        [Authorize(Policy = Policies.UserOnly)]
+        [HttpPost("{brokerSlug}")]
+        public async Task<IActionResult> CreateReview(string brokerSlug ,CreateReview dto)
         {
-            await _reviewService.CreateReviewAsync(dto);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!Guid.TryParse(userId, out Guid reviwerId))
+                throw new UnauthorizedException();
+
+            await _reviewService.CreateReviewAsync(reviwerId , brokerSlug ,dto);
             return Ok();
         }
 
+        [Authorize(Policy = Policies.UserOnly)]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateReview(int id, UpdateReview dto)
         {
@@ -50,6 +61,7 @@ namespace Backend.Api.Controllers
             return Ok();
         }
 
+        [Authorize(Policy = Policies.UserOnly)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReview(int id)
         {

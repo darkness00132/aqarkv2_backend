@@ -1,16 +1,15 @@
 ﻿using Application.DTOs.Auth;
 using Application.DTOs.User;
 using Application.Exceptions;
-using Application.Interfaces;
-using Application.Interfaces.ThirdPartyService;
+using Application.Interfaces.ThirdParty;
 using Application.Validators;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Entities.Brokers;
 using Domain.Entities.UsersEnities;
 using Domain.Enums;
-using Infrastructure.Interfaces;
-using Infrastructure.Interfaces.Brokers;
+using Application.Interfaces;
+using Application.Interfaces.Brokers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
@@ -19,22 +18,24 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using Application.Interfaces.Users;
+using Application.Interfaces.Credits;
 
 namespace Application.Services
 {
-    public class AuthService : IAuthService
+    public class AuthService
     {
         private readonly UserManager<User> _userManager;
         private readonly ICreditsLogRepo _creditsLogRepo;
         private readonly IBrokerProfileRepo _brokerProfileRepo;
-        private readonly ITokenService _tokenService;
+        private readonly IAccessTokenService _tokenService;
         private readonly IEmailService _emailService;
         private readonly IMapper _mapper;
         private readonly IRefreshTokenRepo _refreshTokenRepo;
         private readonly IUnitOfWork _uow;
         private readonly IConfiguration _config;
 
-        public AuthService(UserManager<User> userManager, ICreditsLogRepo creditsLogRepo, IBrokerProfileRepo brokerProfileRepo, ITokenService tokenService, IEmailService emailService, IMapper mapper, IRefreshTokenRepo refreshTokenRepo, IUnitOfWork uow, IConfiguration config)
+        public AuthService(UserManager<User> userManager, ICreditsLogRepo creditsLogRepo, IBrokerProfileRepo brokerProfileRepo, IAccessTokenService tokenService, IEmailService emailService, IMapper mapper, IRefreshTokenRepo refreshTokenRepo, IUnitOfWork uow, IConfiguration config)
         {
             _userManager = userManager;
             _creditsLogRepo = creditsLogRepo;
@@ -50,7 +51,7 @@ namespace Application.Services
         public async Task ConfirmEmailAsync(string userId, string token)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
-            if (user is null) throw ApiException.NotFound("هذا المستخدم غير موجود.");
+            if (user is null) throw new NotFoundException("هذا المستخدم غير موجود.");
 
 
             string decodedToken;
@@ -60,20 +61,20 @@ namespace Application.Services
             }
             catch
             {
-                throw ApiException.BadRequest("رابط تأكيد البريد الإلكتروني غير صالح أو تم نسخه بشكل خاطئ.");
+                throw new BadRequestException("رابط تأكيد البريد الإلكتروني غير صالح أو تم نسخه بشكل خاطئ.");
             }
 
             var result = await _userManager.ConfirmEmailAsync(user, decodedToken);
 
-            if (!result.Succeeded) throw ApiException.BadRequest("تعذر تأكيد البريد الإلكتروني. قد يكون الرابط منتهيًا أو غير صالح.");
+            if (!result.Succeeded) throw new BadRequestException("تعذر تأكيد البريد الإلكتروني. قد يكون الرابط منتهيًا أو غير صالح.");
         }
 
         public async Task HandleCompleteProfileAsync(CompleteProfileDTO dto, string? userId)
         {
-            if (string.IsNullOrEmpty(userId)) throw ApiException.Unauthorized();
+            if (string.IsNullOrEmpty(userId)) throw new UnauthorizedException();
 
             var user = await _userManager.FindByIdAsync(userId);
-            if (user is null) throw ApiException.NotFound("هذا حساب غير موجود");
+            if (user is null) throw new NotFoundException("هذا حساب غير موجود");
 
             await using var transaction = await _uow.BeginTransactionAsync();
 
@@ -99,11 +100,11 @@ namespace Application.Services
 
             var updateResult = await _userManager.UpdateAsync(user);
             if (!updateResult.Succeeded)
-                throw ApiException.Conflict(string.Join(" | ", updateResult.Errors.Select(e => e.Description)));
+                throw new ConflictException(string.Join(" | ", updateResult.Errors.Select(e => e.Description)));
 
             var roleResult = await _userManager.AddToRoleAsync(user, dto.Role.ToString());
             if (!roleResult.Succeeded)
-                throw ApiException.Conflict(string.Join(" | ", roleResult.Errors.Select(e => e.Description)));
+                throw new ConflictException(string.Join(" | ", roleResult.Errors.Select(e => e.Description)));
 
             await _uow.SaveChangesAsync();
             await transaction.CommitAsync();
@@ -112,10 +113,10 @@ namespace Application.Services
         public async Task ForgetPassword(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
-            if (user is null) throw ApiException.NotFound("لا يوجد حساب بهذا البريد الإلكتروني.");
+            if (user is null) throw new BadRequestException("لا يوجد حساب بهذا البريد الإلكتروني.");
 
             bool isConfirmed = await _userManager.IsEmailConfirmedAsync(user);
-            if (!isConfirmed) throw ApiException.Forbidden("لا يمكن إعادة تعيين كلمة المرور قبل تأكيد البريد الإلكتروني.");
+            if (!isConfirmed) throw new ForbiddenException("لا يمكن إعادة تعيين كلمة المرور قبل تأكيد البريد الإلكتروني.");
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
             var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
@@ -194,12 +195,12 @@ namespace Application.Services
         {
             User? user = await _userManager.FindByEmailAsync(userDTO.Email);
 
-            if (user is null) throw ApiException.Unauthorized("بيانات الدخول غير صحيحة.");
-            if (user.IsBlocked) throw ApiException.Forbidden("هذا الحساب محظور.");
-            if (!user.EmailConfirmed) throw ApiException.Forbidden("لم يتم تأكيد البريد الإلكتروني بعد. برجاء مراجعة بريدك وتأكيد الحساب.");
+            if (user is null) throw new BadRequestException("بيانات الدخول غير صحيحة.");
+            if (user.IsBlocked) throw new ForbiddenException("هذا الحساب محظور.");
+            if (!user.EmailConfirmed) throw new ForbiddenException("لم يتم تأكيد البريد الإلكتروني بعد. برجاء مراجعة بريدك وتأكيد الحساب.");
 
             bool passwordValid = await _userManager.CheckPasswordAsync(user, userDTO.Password);
-            if (!passwordValid) throw ApiException.Unauthorized("بيانات الدخول غير صحيحة.");
+            if (!passwordValid) throw new BadRequestException("بيانات الدخول غير صحيحة.");
 
             string accessToken = await CreateAccessToken(user);
 
@@ -213,7 +214,7 @@ namespace Application.Services
         public async Task<LoginResponse> RefreshAsync(string rawRefreshToken, string ip)
         {
             if (string.IsNullOrWhiteSpace(rawRefreshToken))
-                throw ApiException.Unauthorized("انتهت الجلسة. برجاء تسجيل الدخول مرة أخرى.");
+                throw new UnauthorizedException();
 
             string hashToken = Hash(rawRefreshToken);
 
@@ -222,7 +223,7 @@ namespace Application.Services
             RefreshToken? stored = await _refreshTokenRepo.GetByHashAsync(hashToken);
 
             RefreshTokenValidator.Validate(stored);
-            if (stored?.User is null) throw ApiException.Unauthorized("الجلسة غير صالحة. برجاء تسجيل الدخول مرة أخرى.");
+            if (stored?.User is null) throw new UnauthorizedException();
 
             // Use a single timestamp for consistency
             var utcNow = DateTime.UtcNow;
@@ -252,14 +253,14 @@ namespace Application.Services
             {
                 bool isDuplicateEmail = result.Errors.Any(e => e.Code == "DuplicateEmail" || e.Code == "DuplicateUserName");
                 if (isDuplicateEmail)
-                    throw ApiException.Conflict("هذا البريد الإلكتروني مسجل بالفعل، يرجى تسجيل الدخول أو استخدام بريد إلكتروني آخر.");
+                    throw new ConflictException("هذا البريد الإلكتروني مسجل بالفعل، يرجى تسجيل الدخول أو استخدام بريد إلكتروني آخر.");
 
-                throw ApiException.Conflict(string.Join(" | ", result.Errors.Select(e => e.Description)));
+                throw new ConflictException(string.Join(" | ", result.Errors.Select(e => e.Description)));
             }
 
             var roleResult = await _userManager.AddToRoleAsync(user, dto.Role.ToString());
             if (!roleResult.Succeeded)
-                throw ApiException.Conflict(string.Join(" | ", roleResult.Errors.Select(e => e.Description)));
+                throw new ConflictException(string.Join(" | ", roleResult.Errors.Select(e => e.Description)));
 
             if (dto.Role == PublicRoles.Broker)
             {
@@ -290,7 +291,7 @@ namespace Application.Services
         public async Task ResetPassword(ResetPasswordDTO resetPasswordDTO)
         {
             User? user = await _userManager.FindByEmailAsync(resetPasswordDTO.Email);
-            if (user is null) throw ApiException.NotFound("لا يوجد حساب بهذه البيانات.");
+            if (user is null) throw new NotFoundException("لا يوجد حساب بهذه البيانات.");
 
             string decodedToken;
             try
@@ -300,12 +301,12 @@ namespace Application.Services
             }
             catch
             {
-                throw ApiException.BadRequest("رابط إعادة تعيين كلمة المرور غير صالح أو تم نسخه بشكل خاطئ.");
+                throw new BadRequestException("رابط إعادة تعيين كلمة المرور غير صالح أو تم نسخه بشكل خاطئ.");
             }
 
             var result = await _userManager.ResetPasswordAsync(user, decodedToken, resetPasswordDTO.NewPassword);
 
-            if (!result.Succeeded) throw ApiException.BadRequest(string.Join(" | ", result.Errors.Select(e => e.Description)));
+            if (!result.Succeeded) throw new BadRequestException(string.Join(" | ", result.Errors.Select(e => e.Description)));
 
             await _userManager.UpdateSecurityStampAsync(user);
         }
@@ -313,7 +314,7 @@ namespace Application.Services
         public async Task RevokeAllAsync(string userId)
         {
             if (!Guid.TryParse(userId, out var uid))
-                throw ApiException.BadRequest("معرّف المستخدم غير صحيح.");
+                throw new BadRequestException("معرّف المستخدم غير صحيح.");
 
             var tokens = await _refreshTokenRepo.GetActiveByUserAsync(uid);
             if (tokens.Count == 0) return;

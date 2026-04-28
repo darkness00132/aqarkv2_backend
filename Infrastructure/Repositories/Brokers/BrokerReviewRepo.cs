@@ -1,6 +1,5 @@
 ﻿using Domain.Entities.Brokers;
-using Domain.Entities.UsersEnities;
-using Infrastructure.Interfaces.Brokers;
+using Application.Interfaces.Brokers;
 using Infrastructure.Presistance;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,12 +27,11 @@ namespace Infrastructure.Repositories.Brokers
             _context.BrokerReviews.Remove(review);
         }
 
-        public async Task<BrokerReview?> GetByBrokerAndUserAsync(Guid brokerUserId, Guid userId)
+        public async Task<bool> ReviewExistsAsync(Guid brokerUserId, Guid reviewerId)
         {
             return await _context.BrokerReviews
                 .AsNoTracking()
-                .Include(r=>r.User)
-                .FirstOrDefaultAsync(r => r.BrokerUserId == brokerUserId && r.UserId == userId);
+                .AnyAsync(r => r.BrokerUserId == brokerUserId && r.UserId == reviewerId);
         }
 
         public async Task<List<BrokerReview>> GetByBrokerSlugAsync(string slug)

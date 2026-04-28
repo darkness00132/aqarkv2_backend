@@ -1,7 +1,7 @@
 ﻿using Application.DTOs.Auth;
 using Application.DTOs.User;
 using Application.Exceptions;
-using Application.Interfaces;
+using Application.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,11 +14,11 @@ namespace Backend.Api.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly IAuthService _authService;
+        private readonly AuthService _authService;
         private readonly IHostEnvironment _env;
         private readonly IConfiguration _config;
 
-        public AuthController(IAuthService authService, IHostEnvironment env, IConfiguration config)
+        public AuthController(AuthService authService, IHostEnvironment env, IConfiguration config)
         {
             _authService = authService;
             _env = env;
@@ -120,7 +120,7 @@ namespace Backend.Api.Controllers
         {
             var refreshToken = Request.Cookies["refreshToken"];
             if (refreshToken == null)
-                throw ApiException.Unauthorized("refreshToken is not readed");
+                throw new UnauthorizedException();
 
             string ip = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknow";
             LoginResponse response = await _authService.RefreshAsync(refreshToken, ip);

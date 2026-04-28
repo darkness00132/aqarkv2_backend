@@ -2,23 +2,21 @@
 using Application.DTOs.Brokers;
 using Application.DTOs.User;
 using Application.Exceptions;
-using Application.Interfaces;
-using Application.Interfaces.ThirdPartyService;
+using Application.Interfaces.ThirdParty;
 using AutoMapper;
-using Domain.Entities.Brokers;
-using Infrastructure.Interfaces;
-using Infrastructure.Interfaces.Brokers;
+using Application.Interfaces;
+using Application.Interfaces.Brokers;
 
 namespace Application.Services
 {
-    public class BrokerService : IBrokerService
+    public class BrokerService
     {
         private readonly IBrokerProfileRepo _brokerProfileRepo;
-        private readonly IImageService _imageService;
+        private readonly IStorageService _imageService;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _uow;
 
-        public BrokerService(IBrokerProfileRepo brokerProfileRepo, IImageService imageService, IMapper mapper, IUnitOfWork uow)
+        public BrokerService(IBrokerProfileRepo brokerProfileRepo, IStorageService imageService, IMapper mapper, IUnitOfWork uow)
         {
             _brokerProfileRepo = brokerProfileRepo;
             _imageService = imageService;
@@ -35,21 +33,21 @@ namespace Application.Services
         public async Task<Broker> GetBrokerBySlug(string slug, CancellationToken ct=default)
         {
             var broker = await _brokerProfileRepo.GetBrokerProfileBySlugAsync(slug);
-            if (broker is null) throw ApiException.NotFound("هذا مستخدم غير موجود");
+            if (broker is null) throw new NotFoundException("هذا مستخدم غير موجود");
             return _mapper.Map<Broker>(broker);
         }
 
         public async Task<Broker> GetMyBrokerProfile(Guid brokerId, CancellationToken ct = default)
         {
             var broker = await _brokerProfileRepo.GetBrokerProfileByBrokerIdAsync(brokerId,ct);
-            if (broker is null) throw ApiException.NotFound("هذا مستخدم غير موجود");
+            if (broker is null) throw new NotFoundException("هذا مستخدم غير موجود");
             return _mapper.Map<Broker>(broker);
         }
 
         public async Task UpdateBrokerBrofile(Guid brokerId, UpdateBrokerProfile dto)
         {
             var broker = await _brokerProfileRepo.GetBrokerProfileByBrokerIdForMutationAsync(brokerId);
-            if(broker is null) throw ApiException.NotFound("هذا مستخدم غير موجود");
+            if(broker is null) throw new NotFoundException("هذا مستخدم غير موجود");
 
             if(dto?.CoverPhoto is not null)
             {

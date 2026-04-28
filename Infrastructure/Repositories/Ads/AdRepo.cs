@@ -1,10 +1,10 @@
 ﻿using Domain.Entities.AdEntities;
-using Infrastructure.Interfaces.Ads;
+using Application.Interfaces.Ads;
 using Infrastructure.Presistance;
 using Infrastructure.Presistance.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Shared.Filters;
-using Shared.Pagination;
+using Application.Common.Filters;
+using Application.Common.Pagination;
 
 namespace Infrastructure.Repositories.Ads
 {

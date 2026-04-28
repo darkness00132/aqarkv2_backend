@@ -18,9 +18,9 @@ namespace Domain.Entities.UsersEnities
 
         public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 
-        public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
-        public ICollection<BrokerReview> Reviews { get; set; } = new List<BrokerReview>();
-        public ICollection<BrokerReport> Reports { get; set; } = new List<BrokerReport>();
+        public ICollection<RefreshToken> RefreshTokens { get; set; }
+        public ICollection<BrokerReview> Reviews { get; set; }
+        public ICollection<BrokerReport> Reports { get; set; }
 
         public BrokerProfile? BrokerProfile { get; set; }
     }

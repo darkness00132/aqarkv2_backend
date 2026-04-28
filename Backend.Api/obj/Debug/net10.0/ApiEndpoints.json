@@ -542,7 +542,17 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "Application.DTOs.User.BrokerItemList",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "Backend.Api.Controllers.BrokersController",
@@ -552,7 +562,17 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[Application.DTOs.User.BrokerItemList, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "Backend.Api.Controllers.BrokersController",
@@ -617,6 +637,27 @@
   },
   {
     "ContainingType": "Backend.Api.Controllers.ReviewsController",
+    "Method": "CreateReview",
+    "RelativePath": "api/Reviews/{brokerSlug}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "brokerSlug",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "Application.DTOs.Reviews.CreateReview",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Backend.Api.Controllers.ReviewsController",
     "Method": "GetReviewById",
     "RelativePath": "api/Reviews/{id}",
     "HttpMethod": "GET",
@@ -629,7 +670,17 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "Application.DTOs.Reviews.Review",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "Backend.Api.Controllers.ReviewsController",
@@ -671,7 +722,7 @@
   {
     "ContainingType": "Backend.Api.Controllers.ReviewsController",
     "Method": "GetReviewsByBrokerSlug",
-    "RelativePath": "api/Reviews/all",
+    "RelativePath": "api/Reviews/all/{slug}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -679,14 +730,24 @@
       {
         "Name": "slug",
         "Type": "System.String",
-        "IsRequired": false
+        "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[Application.DTOs.Reviews.Review, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "Backend.Api.Controllers.ReviewsController",
-    "Method": "GetReviewsByBrokerSlug2",
+    "Method": "GetAllReviewsOfBroker",
     "RelativePath": "api/Reviews/broker/{slug}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -698,23 +759,17 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Backend.Api.Controllers.ReviewsController",
-    "Method": "CreateReview",
-    "RelativePath": "api/Reviews/create",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
+    "ReturnTypes": [
       {
-        "Name": "dto",
-        "Type": "Application.DTOs.Reviews.CreateReview",
-        "IsRequired": true
+        "Type": "System.Collections.Generic.List\u00601[[Application.DTOs.Reviews.Review, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
       }
-    ],
-    "ReturnTypes": []
+    ]
   },
   {
     "ContainingType": "Backend.Api.Controllers.UsersController",

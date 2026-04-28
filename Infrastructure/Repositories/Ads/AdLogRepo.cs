@@ -1,5 +1,5 @@
 ﻿using Domain.Entities.AdEntities;
-using Infrastructure.Interfaces.Ads;
+using Application.Interfaces.Ads;
 using Infrastructure.Presistance;
 using Microsoft.EntityFrameworkCore;
 

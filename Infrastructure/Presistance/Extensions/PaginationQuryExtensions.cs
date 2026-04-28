@@ -1,4 +1,4 @@
-﻿using Shared.Pagination;
+﻿using Application.Common.Pagination;
 
 namespace Infrastructure.Presistance.Extensions
 {

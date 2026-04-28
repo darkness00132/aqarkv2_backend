@@ -1,34 +1,34 @@
 ﻿using Application.DTOs.Ad;
 using Application.DTOs.Ad.Private;
 using Application.Exceptions;
-using Application.Interfaces;
-using Application.Interfaces.ThirdPartyService;
+using Application.Interfaces.ThirdParty;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Entities.AdEntities;
 using Domain.Enums;
 using Domain.Services;
-using Infrastructure.Interfaces;
-using Infrastructure.Interfaces.Ads;
-using Shared.Filters;
-using Shared.Pagination;
+using Application.Interfaces;
+using Application.Interfaces.Ads;
+using Application.Common.Filters;
+using Application.Common.Pagination;
 using System.Text.RegularExpressions;
+using Application.Interfaces.Credits;
 
 namespace Application.Services
 {
-    public class AdService : IAdService
+    public class AdService
     {
-        private readonly IImageService _storageService;
+        private readonly IStorageService _storageService;
         private readonly IMapper _mapper;
         private readonly IAdRepo _adRepo;
         private readonly IImageRepo _imageRepo;
         private readonly ICreditsRepo _creditsRepo;
         private readonly IAdLogRepo _adLogRepo;
         private readonly ICreditsLogRepo _creditsLogRepo;
-        private readonly LocationService _locationService;
+        private readonly ILocationService _locationService;
         private readonly IUnitOfWork _uow;
 
-        public AdService(IImageService storageService, IMapper mapper, IAdRepo adRepo, IImageRepo imageRepo, ICreditsRepo creditsRepo, IAdLogRepo adLogRepo, ICreditsLogRepo creditsLogRepo, LocationService locationService, IUnitOfWork uow)
+        public AdService(IStorageService storageService, IMapper mapper, IAdRepo adRepo, IImageRepo imageRepo, ICreditsRepo creditsRepo, IAdLogRepo adLogRepo, ICreditsLogRepo creditsLogRepo, ILocationService locationService, IUnitOfWork uow)
         {
             _storageService = storageService;
             _mapper = mapper;
@@ -45,7 +45,7 @@ namespace Application.Services
         {
             //check if location setted correctly
             if (!_locationService.CityBelongsToGovernorate(dto.GovernorateId, dto.CityId))
-                throw ApiException.BadRequest("المدينة مدخلة ليس ضمن نطاق محافظة المدخلة");
+                throw new BadRequestException("المدينة مدخلة ليس ضمن نطاق محافظة المدخلة");
 
             //utrack images uplaod and deletion
             List<Stream> imagesStreams = dto.Images
@@ -62,7 +62,7 @@ namespace Application.Services
                 //verfiy user have required tokens first
                 int cost = AdCreditCalculator.CalculatePostCost(dto.Type, dto.PropertyType, dto.Price);
                 bool result = await _creditsRepo.DeductAsync(userId, cost);
-                if (!result) throw ApiException.BadRequest("لا يوجد كريدت كافية لعمل اعلان");
+                if (!result) throw new BadRequestException("لا يوجد كريدت كافية لعمل اعلان");
 
 
                 Ad ad = _mapper.Map<Ad>(dto);
@@ -114,7 +114,7 @@ namespace Application.Services
         public async Task<AdDTO> GetAdBySlug(string slug, CancellationToken ct = default)
         {
             Ad? ad = await _adRepo.GetAdBySlugAsync(slug);
-            if (ad is null) throw ApiException.NotFound("الاعلان غير موجود");
+            if (ad is null) throw new NotFoundException("الاعلان غير موجود");
             AdDTO result = _mapper.Map<AdDTO>(ad);
 
             result.GovernorateName = _locationService.GetGovernorateName(ad.GovernorateId);
@@ -126,7 +126,7 @@ namespace Application.Services
         public async Task<Ad> GetAdById(Guid id, CancellationToken ct = default)
         {
             Ad? ad = await _adRepo.GetAdByIdAsync(id, ct);
-            if (ad is null) throw ApiException.NotFound("الاعلان غير موجود");
+            if (ad is null) throw new NotFoundException("الاعلان غير موجود");
 
             return ad;
         }
@@ -182,9 +182,9 @@ namespace Application.Services
         public async Task UpdateAdAsync(Guid Id, Guid userId, UpdateAdDTO dto)
         {
             var existingAd = await _adRepo.GetByIdToMutateAsync(Id);
-            if (existingAd is null) throw ApiException.NotFound("هذا الاعلان غير متاح");
+            if (existingAd is null) throw new NotFoundException("هذا الاعلان غير متاح");
 
-            if (existingAd.UserId != userId) throw ApiException.Forbidden("لا تمتلك صلاحية تعديل على هذا الاعلان");
+            if (existingAd.UserId != userId) throw new ForbiddenException("لا تمتلك صلاحية تعديل على هذا الاعلان");
 
             //calculate total images user will have (max 5)
             int existingImagesCount = existingAd.Images.Count;
@@ -193,9 +193,9 @@ namespace Application.Services
 
             List<string> ImagesToDelete = new List<string>();
 
-            if (existingImagesCount + newImagesCount - deletedImagesCount > 5) throw ApiException.BadRequest("العدد الاجمالى لصور يجب ان لا يزيد عن 5 صور");
+            if (existingImagesCount + newImagesCount - deletedImagesCount > 5) throw new BadRequestException("العدد الاجمالى لصور يجب ان لا يزيد عن 5 صور");
 
-            if (existingImagesCount + newImagesCount - deletedImagesCount < 1) throw ApiException.BadRequest("يجب ان يحتوى اعلان على صورة واحدة على الاقل");
+            if (existingImagesCount + newImagesCount - deletedImagesCount < 1) throw new BadRequestException("العدد الاجمالى لصور يجب ان لا يزيد عن 5 صور");
 
             int cost = dto.Price.HasValue
       ? AdCreditCalculator.CalculateUpdateCost(existingAd.Price, dto.Price.Value, existingAd.Type, existingAd.CreatedAt)
@@ -248,7 +248,7 @@ namespace Application.Services
                 if (cost > 0)
                 {
                     bool deducted = await _creditsRepo.DeductAsync(userId, cost);
-                    if (!deducted) throw ApiException.BadRequest("لا يوجد كريدت كافية لتعديل الاعلان");
+                    if (!deducted) throw new BadRequestException("لا يوجد كريدت كافية لتعديل الاعلان");
                 }
 
                 await _adLogRepo.LogAsync(new AdLog
@@ -284,8 +284,12 @@ namespace Application.Services
         public async Task DeleteAdAsync(Guid id, Guid userId)
         {
             Ad? ad = await _adRepo.GetByIdToMutateAsync(id);
-            if (ad is null) throw ApiException.NotFound("الاعلان غير موجود");
-            if (ad.UserId != userId) throw ApiException.Forbidden("لا تمتلك صلاحية تعديل على هذا الاعلان");
+            if (ad is null)
+                throw new NotFoundException("الاعلان غير موجود");
+
+            if (ad.UserId != userId)
+                throw new ForbiddenException("لا تمتلك صلاحية تعديل على هذا الاعلان");
+
 
             List<string> imagesToDelete = ad.Images.Select(img => img.Url).ToList();
 

@@ -34,40 +34,16 @@ namespace Infrastructure.Presistance
             base.OnModelCreating(builder);
 
             builder.Entity<BrokerReport>()
-                    .HasOne(r => r.Broker)
-                    .WithMany()
-                    .HasForeignKey(r => r.BrokerUserId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                .HasOne(r => r.Broker)
+                .WithMany()
+                .HasForeignKey(r => r.BrokerUserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<BrokerReport>()
-                    .HasOne(r => r.User)
-                    .WithMany()
-                    .HasForeignKey(r => r.UserId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<BrokerReview>()
-                    .HasOne(r => r.BrokerProfile)
-                    .WithMany()
-                    .HasForeignKey(r => r.BrokerUserId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<BrokerReview>()
-                    .HasOne(r => r.User)
-                    .WithMany()
-                    .HasForeignKey(r => r.UserId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                builder.Entity<CreditsLog>()
-                    .HasOne(c => c.Ad)
-                    .WithMany(a => a.CreditsLog)
-                    .HasForeignKey(c => c.AdId)
-                    .OnDelete(DeleteBehavior.Cascade);
-
-                builder.Entity<BrokerReview>()
-                    .HasOne(r => r.BrokerProfile)
-                    .WithMany()
-                    .HasForeignKey(r => r.BrokerUserId)
-                    .HasPrincipalKey(b => b.UserId);
+            builder.Entity<CreditsLog>()
+                .HasOne(c => c.Ad)
+                .WithMany(a => a.CreditsLog)
+                .HasForeignKey(c => c.AdId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         }

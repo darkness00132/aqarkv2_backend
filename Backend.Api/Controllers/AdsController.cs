@@ -2,12 +2,12 @@
 using Application.DTOs.Ad;
 using Application.DTOs.Ad.Private;
 using Application.Exceptions;
-using Application.Interfaces;
+using Application.Services;
 using Domain.Entities.AdEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Filters;
-using Shared.Pagination;
+using Application.Common.Filters;
+using Application.Common.Pagination;
 using System.Security.Claims;
 
 namespace Backend.Api.Controllers
@@ -16,9 +16,9 @@ namespace Backend.Api.Controllers
     [ApiController]
     public class AdsController : ControllerBase
     {
-        private readonly IAdService _adService;
+        private readonly AdService _adService;
 
-        public AdsController(IAdService adService)
+        public AdsController(AdService adService)
         {
             _adService = adService;
         }
@@ -37,7 +37,7 @@ namespace Backend.Api.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (!Guid.TryParse(userId, out Guid parsedUserId))
-                throw ApiException.Unauthorized();
+                throw new UnauthorizedException();
 
             return await _adService.GetMyAds(filters, pagination, parsedUserId, ct);
         }
@@ -61,7 +61,7 @@ namespace Backend.Api.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (!Guid.TryParse(userId, out Guid parsedUserId))
-                throw ApiException.Unauthorized();
+                throw new UnauthorizedException();
 
             await _adService.CreateAdAsync(request, parsedUserId);
             return Created();
@@ -75,7 +75,7 @@ namespace Backend.Api.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (!Guid.TryParse(userId, out Guid parsedUserId))
-                throw ApiException.Unauthorized();
+                throw new UnauthorizedException();
 
             await _adService.UpdateAdAsync(id, parsedUserId, dto);
             return Ok();
@@ -89,7 +89,7 @@ namespace Backend.Api.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (!Guid.TryParse(userId, out Guid parsedUserId))
-                throw ApiException.Unauthorized();
+                throw new UnauthorizedException();
 
             await _adService.DeleteAdAsync(id, parsedUserId);
             return Ok();

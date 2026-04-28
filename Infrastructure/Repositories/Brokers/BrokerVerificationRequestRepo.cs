@@ -1,6 +1,6 @@
 ﻿using Domain.Entities.Brokers;
 using Domain.Enums;
-using Infrastructure.Interfaces.Brokers;
+using Application.Interfaces.Brokers;
 using Infrastructure.Presistance;
 using Microsoft.EntityFrameworkCore;
 

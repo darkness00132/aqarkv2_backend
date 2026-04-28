@@ -1,6 +1,6 @@
 ﻿using Application.DTOs.User;
 using Application.Exceptions;
-using Application.Interfaces;
+using Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -11,9 +11,9 @@ namespace Backend.Api.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly UserService _userService;
 
-        public UsersController(IUserService userService)
+        public UsersController(UserService userService)
         {
             _userService = userService;
         }
@@ -26,7 +26,7 @@ namespace Backend.Api.Controllers
 
             if (string.IsNullOrEmpty(userId))
             {
-                throw ApiException.Unauthorized();
+                throw new UnauthorizedException();
             }
 
             return await _userService.GetMe(userId);

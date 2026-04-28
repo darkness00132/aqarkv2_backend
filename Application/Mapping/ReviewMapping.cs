@@ -12,6 +12,10 @@ namespace Application.Mapping
                 .ForMember(dest => dest.ReviewerName, opt => opt.MapFrom(src => src.User.Name))
                 .ForMember(dest => dest.ReviewerProfilePhoto, opt => opt.MapFrom(src => src.User.ProfilePhoto));
 
+            CreateMap<BrokerReview, ReviewItem>()
+                .ForMember(dest => dest.ReviewerName, opt => opt.MapFrom(src => src.User.Name))
+                .ForMember(dest => dest.ReviewerProfilePhoto, opt => opt.MapFrom(src => src.User.ProfilePhoto));
+
             CreateMap<CreateReview, BrokerReview>();
 
             CreateMap<UpdateReview, BrokerReview>()

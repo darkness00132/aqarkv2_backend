@@ -1,21 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Application.Exceptions
+﻿namespace Application.Exceptions
 {
-    public sealed class ApiException : Exception
+    public abstract class ApiException : Exception
     {
-        public int StatusCode { get; }
+        protected ApiException(string message) : base(message) { }
+    }
 
-        public ApiException(int statusCode, string message) : base(message)
-            => StatusCode = statusCode;
+    public sealed class BadRequestException : ApiException
+    {
+        public BadRequestException(string message)
+            : base(message) { }
+    }
 
-        public static ApiException NotFound(string msg= "العنصر المطلوب غير موجود.") => new(404, msg);
-        public static ApiException BadRequest(string msg="البيانات المُرسلة غير صحيحة. برجاء المراجعة والمحاولة مرة أخرى.") => new(400, msg);
-        public static ApiException Unauthorized(string msg= "غير مصرح. برجاء تسجيل الدخول ثم المحاولة مرة أخرى.") => new (401, msg);
-        public static ApiException Forbidden(string msg="ليس لديك صلاحية لإتمام هذا الإجراء.") => new (403, msg);
-        public static ApiException Conflict(string msg="حدث تعارض في البيانات. قد يكون الطلب مكررًا أو البيانات موجودة بالفعل.") => new(409, msg);
-        public static ApiException InternalServerError(string msg = "حدث خطأ داخلي في الخادم، يرجى المحاولة لاحقاً.") => new(500, msg);
+    public sealed class UnauthorizedException : ApiException
+    {
+        public UnauthorizedException(string message =
+            "غير مصرح. برجاء تسجيل الدخول ثم المحاولة مرة أخرى.")
+            : base(message) { }
+    }
+
+    public sealed class ForbiddenException : ApiException
+    {
+        public ForbiddenException(string message)
+            : base(message) { }
+    }
+
+    public sealed class NotFoundException : ApiException
+    {
+        public NotFoundException(string message)
+            : base(message) { }
+    }
+
+    public sealed class ConflictException : ApiException
+    {
+        public ConflictException(string message)
+            : base(message) { }
     }
 }

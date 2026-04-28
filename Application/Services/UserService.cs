@@ -1,15 +1,12 @@
 ﻿
 using Application.DTOs.User;
 using Application.Exceptions;
-using Application.Interfaces;
 using AutoMapper;
-using Domain.Entities.UsersEnities;
-using Infrastructure.Interfaces;
-using Microsoft.AspNetCore.Identity;
+using Application.Interfaces.Users;
 
 namespace Application.Services
 {
-    public class UserService : IUserService
+    public class UserService
     {
         private readonly IUserRepo _userRepo;
         private readonly IMapper _mapper;
@@ -23,7 +20,7 @@ namespace Application.Services
         public async Task<UserDTO> GetMe(string UserId)
         {
             var user = await _userRepo.GetByIdWithBrokerProfileAsync(Guid.Parse(UserId));
-            if (user is null) throw ApiException.Unauthorized();
+            if (user is null) throw new UnauthorizedException();
             return _mapper.Map<UserDTO>(user);
         }
     }

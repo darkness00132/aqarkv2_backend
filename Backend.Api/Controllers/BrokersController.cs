@@ -2,7 +2,7 @@
 using Application.DTOs.Brokers;
 using Application.DTOs.User;
 using Application.Exceptions;
-using Application.Interfaces;
+using Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -13,21 +13,21 @@ namespace Backend.Api.Controllers
     [ApiController]
     public class BrokersController : ControllerBase
     {
-        private readonly IBrokerService _brokerService;
+        private readonly BrokerService _brokerService;
 
-        public BrokersController(IBrokerService brokerService)
+        public BrokersController(BrokerService brokerService)
         {
             _brokerService = brokerService;
         }
 
         [HttpGet("all")]
-        public async Task<IActionResult> GetAllBrokers(CancellationToken ct)
+        public async Task<ActionResult<List<BrokerItemList>>> GetAllBrokers(CancellationToken ct)
         {
             return Ok(await _brokerService.GetAllBrokers(ct));
         }
 
         [HttpGet("{slug}")]
-        public async Task<IActionResult> GetBrokerBySlug(string slug,CancellationToken ct)
+        public async Task<ActionResult<BrokerItemList>> GetBrokerBySlug(string slug,CancellationToken ct)
         {
             return Ok(await _brokerService.GetBrokerBySlug(slug, ct));
         }
@@ -39,7 +39,7 @@ namespace Backend.Api.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (!Guid.TryParse(userId, out Guid parsedUserId))
-                throw ApiException.Unauthorized();
+                throw new UnauthorizedException();
 
             return await _brokerService.GetMyBrokerProfile(parsedUserId);  
         }
@@ -51,7 +51,7 @@ namespace Backend.Api.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (!Guid.TryParse(userId, out Guid parsedUserId))
-                throw ApiException.Unauthorized();
+                throw new UnauthorizedException();
 
             await _brokerService.UpdateBrokerBrofile(parsedUserId, dto);
 

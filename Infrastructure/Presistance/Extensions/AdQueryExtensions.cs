@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Domain.Entities.AdEntities;
-using Shared.Filters;
+using Application.Common.Filters;
 
 namespace Infrastructure.Presistance.Extensions
 {

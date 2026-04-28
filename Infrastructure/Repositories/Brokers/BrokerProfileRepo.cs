@@ -1,6 +1,6 @@
 ﻿
 using Domain.Entities.Brokers;
-using Infrastructure.Interfaces.Brokers;
+using Application.Interfaces.Brokers;
 using Infrastructure.Presistance;
 using Microsoft.EntityFrameworkCore;
 
@@ -47,6 +47,15 @@ namespace Infrastructure.Repositories.Brokers
                 .AsNoTracking()
                 .Include(b=>b.User)
                 .FirstOrDefaultAsync(b => b.Slug == slug);
+        }
+
+        public async Task<Guid?> GetBrokerIdBySlugAsync(string slug)
+        {
+            return await _context.BrokerProfiles
+                .AsNoTracking()
+                .Where(b => b.Slug == slug)
+                .Select(b => b.UserId)
+                .FirstOrDefaultAsync();
         }
     }
 }

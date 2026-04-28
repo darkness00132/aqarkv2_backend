@@ -28,6 +28,7 @@ namespace Domain.Entities.Brokers
         public double AverageRating { get; set; } = 0;
         public int ReviewCount { get; set; } = 0;
 
+        public ICollection<BrokerReview> Reviews { get; set; }
         public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
     }
 }

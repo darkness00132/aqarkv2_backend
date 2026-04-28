@@ -36,3 +36,16 @@ D:\codes\AqarkV2\Backend\Domain\obj\Debug\net10.0\Domain.dll
 D:\codes\AqarkV2\Backend\Domain\obj\Debug\net10.0\refint\Domain.dll
 D:\codes\AqarkV2\Backend\Domain\obj\Debug\net10.0\Domain.pdb
 D:\codes\AqarkV2\Backend\Domain\obj\Debug\net10.0\ref\Domain.dll
+C:\codes\AqarkV2\Backend\Domain\bin\Debug\net10.0\Domain.deps.json
+C:\codes\AqarkV2\Backend\Domain\bin\Debug\net10.0\Domain.dll
+C:\codes\AqarkV2\Backend\Domain\bin\Debug\net10.0\Domain.pdb
+C:\codes\AqarkV2\Backend\Domain\obj\Debug\net10.0\Domain.csproj.AssemblyReference.cache
+C:\codes\AqarkV2\Backend\Domain\obj\Debug\net10.0\Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\codes\AqarkV2\Backend\Domain\obj\Debug\net10.0\Domain.AssemblyInfoInputs.cache
+C:\codes\AqarkV2\Backend\Domain\obj\Debug\net10.0\Domain.AssemblyInfo.cs
+C:\codes\AqarkV2\Backend\Domain\obj\Debug\net10.0\Domain.csproj.CoreCompileInputs.cache
+C:\codes\AqarkV2\Backend\Domain\obj\Debug\net10.0\Domain.sourcelink.json
+C:\codes\AqarkV2\Backend\Domain\obj\Debug\net10.0\Domain.dll
+C:\codes\AqarkV2\Backend\Domain\obj\Debug\net10.0\refint\Domain.dll
+C:\codes\AqarkV2\Backend\Domain\obj\Debug\net10.0\Domain.pdb
+C:\codes\AqarkV2\Backend\Domain\obj\Debug\net10.0\ref\Domain.dll

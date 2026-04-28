@@ -1,6 +1,7 @@
 ﻿using Domain.Entities.UsersEnities;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities.Brokers
 {
