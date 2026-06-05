@@ -591,3 +591,14 @@ C:\codes\AqarkV2\Backend\Backend.Api\obj\Debug\net10.0\staticwebassets.upToDateC
 C:\codes\AqarkV2\Backend\Backend.Api\obj\Debug\net10.0\Backend..0C93C9B3.Up2Date
 C:\codes\AqarkV2\Backend\Backend.Api\obj\Debug\net10.0\Backend.Api.genruntimeconfig.cache
 C:\codes\AqarkV2\Backend\Backend.Api\obj\Debug\net10.0\ref\Backend.Api.dll
+C:\codes\AqarkV2\Backend\Backend.Api\bin\Debug\net10.0\Serilog.dll
+C:\codes\AqarkV2\Backend\Backend.Api\bin\Debug\net10.0\Serilog.AspNetCore.dll
+C:\codes\AqarkV2\Backend\Backend.Api\bin\Debug\net10.0\Serilog.Extensions.Hosting.dll
+C:\codes\AqarkV2\Backend\Backend.Api\bin\Debug\net10.0\Serilog.Extensions.Logging.dll
+C:\codes\AqarkV2\Backend\Backend.Api\bin\Debug\net10.0\Serilog.Formatting.Compact.dll
+C:\codes\AqarkV2\Backend\Backend.Api\bin\Debug\net10.0\Serilog.Settings.Configuration.dll
+C:\codes\AqarkV2\Backend\Backend.Api\bin\Debug\net10.0\Serilog.Sinks.Console.dll
+C:\codes\AqarkV2\Backend\Backend.Api\bin\Debug\net10.0\Serilog.Sinks.Debug.dll
+C:\codes\AqarkV2\Backend\Backend.Api\bin\Debug\net10.0\Serilog.Sinks.File.dll
+C:\codes\AqarkV2\Backend\Backend.Api\bin\Debug\net10.0\Backend.Api.xml
+C:\codes\AqarkV2\Backend\Backend.Api\obj\Debug\net10.0\Backend.Api.xml

@@ -1,14 +1,9 @@
-﻿using Amazon.S3;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using Application.Interfaces.Ads;
 using Application.Interfaces.Brokers;
 using Application.Interfaces.Credits;
 using Application.Interfaces.ThirdParty;
 using Application.Interfaces.Users;
-using Application.Options;
-using Domain.Entities.UsersEnities;
-using Domain.Enums;
-using Infrastructure.Presistance;
 using Infrastructure.Repositories;
 using Infrastructure.Repositories.Ads;
 using Infrastructure.Repositories.Brokers;
@@ -16,12 +11,8 @@ using Infrastructure.Repositories.Credits;
 using Infrastructure.Repositories.Users;
 using Infrastructure.Services.ThirdPartyService;
 using Infrastructure.ThirdPartyService;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Resend;
 
 namespace Infrastructure.DI
 {
